@@ -21,7 +21,6 @@ return new class extends Migration
             $table->decimal('price', 10, 2);
             $table->unsignedBigInteger('downloads')->default(0);
             $table->json('tags')->nullable();
-            $table->foreignId('category_id');
         });
     }
 
