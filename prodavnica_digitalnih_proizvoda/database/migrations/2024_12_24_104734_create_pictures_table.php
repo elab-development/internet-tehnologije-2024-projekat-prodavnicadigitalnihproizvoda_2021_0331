@@ -16,8 +16,8 @@ return new class extends Migration
         Schema::create('pictures', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->string('low_res_path')->default("images/low_res/1l.png");
-            $table->string('high_res_path')->default("images/high_res/1.png");
+            $table->string('low_res_path')->default("images/low_res/defaultl.png");
+            $table->string('high_res_path')->default("images/high_res/default.png");
             $table->decimal('price', 10, 2);
             $table->unsignedBigInteger('downloads')->default(0);
             $table->json('tags')->nullable();
