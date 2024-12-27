@@ -14,4 +14,5 @@ class Picture extends Model
         'low_res_path' => 'images/low_res/1l.png',
         'high_res_path' => 'images/high_res/1.png',
     ];
+    
 }
