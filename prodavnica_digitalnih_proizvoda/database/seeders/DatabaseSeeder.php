@@ -23,7 +23,7 @@ class DatabaseSeeder extends Seeder
         Picture::truncate();
         Cart::truncate();
 
-        $user=User::factory()->create();
+        $user=User::factory(5)->create();
 
 
         //\App\Models\User::factory()->create([

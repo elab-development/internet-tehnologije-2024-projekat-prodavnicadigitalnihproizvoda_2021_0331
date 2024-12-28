@@ -2,6 +2,9 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PictureController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,3 +20,13 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::get('pictures/{id}',[PictureController::class,'show']);
+Route::get('pictures',[PictureController::class,'index']);
+Route::get('/users',[UserController::class,'index']);
+// Route::get('/users/{id}',[UserController::class,'show']);
+
+Route::resource('pictures', PictureController::class);
+
+//Route::get('pictures/{id}/category',[CategoryController::class,'index'])->name('pictures.category.index');
+
