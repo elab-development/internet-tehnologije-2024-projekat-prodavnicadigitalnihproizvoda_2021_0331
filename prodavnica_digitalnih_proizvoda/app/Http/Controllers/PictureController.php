@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\Picture;
 use App\Http\Resources\PictureResource;
 use App\Http\Resources\PictureCollection;
+use Illuminate\Support\Facades\Validator;
+
 
 class PictureController extends Controller
 {
@@ -18,15 +20,27 @@ class PictureController extends Controller
 
     public function store(Request $request)
     {
-        $validated = $request->validate([
+        $validator = Validator::make($request->all(),[
             'title' => 'required|string|max:255',
+            'description' => 'required|string|max:255',
+            'category_id' => 'required',
             'low_res_path' => 'required|string',
             'high_res_path' => 'required|string',
             'price' => 'required|numeric',
         ]);
 
-        $picture = Picture::create($validated);
-        return response()->json($picture, 201);
+        if($validator->fails())
+            return response()->json($validator->errors());
+
+        $picture = Picture::create([
+            'title' => $request->title,
+            'description' => $request->description,
+            'category_id' => $request->category_id,
+            'low_res_path' => $request->low_res_path,
+            'high_res_path' => $request->high_res_path,
+            'price' => $request->price,
+        ]);
+        return response()->json(['Picture is created successfully', new PictureResource($picture)]);
     }
 
     public function show($id){
@@ -41,33 +55,38 @@ class PictureController extends Controller
         return response()->json($picture, 200);
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, Picture $picture)
     {
-        $picture = Picture::find($id);
-        if (!$picture) {
-            return response()->json(['error' => 'Picture not found'], 404);
-        }
-
-        $validated = $request->validate([
+        $validator = Validator::make($request->all(),[
             'title' => 'required|string|max:255',
+            'description' => 'required|string|max:255',
+            'category_id' => 'required',
             'low_res_path' => 'required|string',
             'high_res_path' => 'required|string',
             'price' => 'required|numeric',
         ]);
 
-        $picture->update($validated);
-        return response()->json($picture, 200);
-    }
+        if($validator->fails()){
+            return response()->json($validator->errors());
 
-    public function destroy($id)
-    {
-        $picture = Picture::find($id);
-        if (!$picture) {
-            return response()->json(['error' => 'Picture not found'], 404);
         }
 
+        $picture->title = $request->title;
+        $picture->description = $request->description;
+        $picture->category_id = $request->category_id;
+        $picture->low_res_path = $request->low_res_path;
+        $picture->high_res_path = $request->high_res_path;
+        $picture->price = $request->price;
+
+        $picture->save();
+        return response()->json(['Picture is updated successfully', new PictureResource($picture)]);
+    }
+
+    public function destroy(Picture $picture)
+    {
+        
         $picture->delete();
-        return response()->json(['message' => 'Picture deleted successfully'], 200);
+        return response()->json('Picture is deleted successfully');    
     }
 
     public function searchByTitle($title)
@@ -103,6 +122,17 @@ public function searchByPrice($price)
  
     return response()->json($pictures, 200);
 }
+
+//public function paginate(Request $request)
+  //  {
+    //    $perPage = $request->input('per_page', 4);
+ //
+   //     $pictures = Picture::paginate($perPage); 
+ //
+   //     return response()->json($pictures, 200);
+    //}
+
+
 
 
 }
