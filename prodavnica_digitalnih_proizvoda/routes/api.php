@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PictureController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\UserController;
+use App\Models\Picture;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,4 +30,14 @@ Route::get('/users',[UserController::class,'index']);
 Route::resource('pictures', PictureController::class);
 
 //Route::get('pictures/{id}/category',[CategoryController::class,'index'])->name('pictures.category.index');
+
+
+
+
+//------------------------------------
+Route::get('categories/{category}/pictures', [PictureController::class, 'searchByCategory']);
+
+Route::get('pictures/search/{title}', [PictureController::class, 'searchByTitle']);
+
+Route::get('pictures/under/{price}', [PictureController::class, 'searchByPrice']);
 

@@ -10,9 +10,10 @@ use App\Http\Resources\PictureCollection;
 class PictureController extends Controller
 {
     public function index(){
-        $pictures = Picture::all();
+        //$pictures = Picture::all();
         //return PictureResource::collection($pictures);
-        return new PictureCollection($pictures);
+        //return new PictureCollection($pictures);
+        return response()->json(Picture::all(), 200);
     }
 
     public function store(Request $request)
@@ -68,5 +69,40 @@ class PictureController extends Controller
         $picture->delete();
         return response()->json(['message' => 'Picture deleted successfully'], 200);
     }
+
+    public function searchByTitle($title)
+{
+    $pictures = Picture::where('title', 'like', '%' . $title . '%')->get();
+ 
+    if ($pictures->isEmpty()) {
+        return response()->json(['error' => 'No pictures found'], 404);
+    }
+ 
+    return response()->json($pictures, 200);
+}
+
+
+public function searchByCategory($category)
+{
+    $pictures = Picture::where('category_id', $category)->get();
+ 
+    if ($pictures->isEmpty()) {
+        return response()->json(['error' => 'No pictures found in this category'], 404);
+    }
+ 
+    return response()->json($pictures, 200);
+}
+
+public function searchByPrice($price)
+{
+    $pictures = Picture::where('price', '<=', $price)->get();
+ 
+    if ($pictures->isEmpty()) {
+        return response()->json(['error' => 'No pictures found under this price'], 404);
+    }
+ 
+    return response()->json($pictures, 200);
+}
+
 
 }
