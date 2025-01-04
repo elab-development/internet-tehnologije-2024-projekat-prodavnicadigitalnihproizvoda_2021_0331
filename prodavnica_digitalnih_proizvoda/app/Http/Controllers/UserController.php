@@ -14,10 +14,6 @@ class UserController extends Controller
      */
     public function index()
     {
-        //vraca listu objekata
-        //$users = DB::table('users')->get();  -vraca sa sve sifrom i tokenom
-        // $users = User::all();
-        // return $users;
         return response()->json(User::all(), 200);
         
     }
@@ -29,7 +25,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        //kreiranj 1 objekta
+       
     }
 
     /**
@@ -40,7 +36,7 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //za cuvanje objekata u bazi
+
     }
 
     /**
@@ -65,7 +61,7 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        //uredjivanje 1 objekta
+        
     }
 
     /**
@@ -77,7 +73,7 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
-        //cuvanje azuriranog objekta
+        
     }
 
     /**
@@ -88,6 +84,13 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-        //brise objekat
+        $user = User::find($id);
+
+        if (!$user) {
+            return response()->json(['message' => 'User not found'], 404);
+        }
+
+        $user->delete();
+        return response()->json(['message' => 'User deleted successfully'], 200);
     }
 }

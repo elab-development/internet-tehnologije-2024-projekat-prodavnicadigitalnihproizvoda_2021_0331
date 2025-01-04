@@ -12,9 +12,7 @@ use Illuminate\Support\Facades\Validator;
 class PictureController extends Controller
 {
     public function index(){
-        //$pictures = Picture::all();
-        //return PictureResource::collection($pictures);
-        //return new PictureCollection($pictures);
+       
         return response()->json(Picture::all(), 200);
     }
 
@@ -44,9 +42,7 @@ class PictureController extends Controller
     }
 
     public function show($id){
-        //$pictures = Picture::find($id);
-
-        //return new PictureResource($picture);
+        
         $picture = Picture::find($id);
         if (!$picture) {
             return response()->json(['error' => 'Picture not found'], 404);
@@ -94,7 +90,7 @@ class PictureController extends Controller
     $pictures = Picture::where('title', 'like', '%' . $title . '%')->get();
  
     if ($pictures->isEmpty()) {
-        return response()->json(['error' => 'No pictures found'], 404);
+        return response()->json(['error' => 'No picture found'], 404);
     }
  
     return response()->json($pictures, 200);
@@ -123,16 +119,49 @@ public function searchByPrice($price)
     return response()->json($pictures, 200);
 }
 
-//public function paginate(Request $request)
-  //  {
-    //    $perPage = $request->input('per_page', 4);
- //
-   //     $pictures = Picture::paginate($perPage); 
- //
-   //     return response()->json($pictures, 200);
-    //}
+public function showLowRes($id)
+    {
+        $picture = Picture::find($id);
+
+        if (!$picture) {
+            return response()->json(['message' => 'Picture not found'], 404);
+        }
+
+        return response()->json(['low_res_path' => $picture->low_res_path], 200);
+    }
+
+public function showHighRes($id)
+    {
+        $picture = Picture::find($id);
+
+        if (!$picture) {
+            return response()->json(['message' => 'Picture not found'], 404);
+        }
+
+        return response()->json(['high_res_path' => $picture->high_res_path], 200);
+    }
 
 
 
+    public function paginate_pictures(Request $request)
+{
+    
+    $perPage = $request->input('per_page', 4);
+
+
+    $pictures = Picture::paginate($perPage);
+
+    if ($pictures->isEmpty()) {
+        return response()->json(['error' => 'No pictures found'], 404);
+    }
+
+    return response()->json([
+        'current_page' => $pictures->currentPage(),
+        'data' => $pictures->items(),
+        'per_page' => $pictures->perPage(),
+        'total' => $pictures->total(),
+        'last_page' => $pictures->lastPage()
+    ], 200);
+}
 
 }

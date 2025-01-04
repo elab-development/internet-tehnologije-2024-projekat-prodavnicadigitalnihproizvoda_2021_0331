@@ -4,14 +4,47 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Picture;
+use App\Models\Category;
 
 class CategoryController extends Controller
 {
-    public function index($category_id)
+    public function index()
     {
-        $pictures = Picture::get()->where('category_id',$category_id);
-        if(is_null($pictures))
-            return response()->json('Data not found',404);
-        return response()->json($pictures);
+        return response()->json(Category::all(), 200);
+    }
+
+    public function show($id)
+    {
+        $category = Category::find($id);
+
+        if (!$category) {
+            return response()->json(['message' => 'Category not found'], 404);
+        }
+
+        return response()->json($category, 200);
+    }
+
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255|unique:categories',
+            'description' => 'nullable|string'
+        ]);
+
+        $category = Category::create($validated);
+
+        return response()->json(['message' => 'Category created successfully', 'category' => $category], 201);
+    }
+
+    public function destroy($id)
+    {
+        $category = Category::find($id);
+
+        if (!$category) {
+            return response()->json(['message' => 'Category not found'], 404);
+        }
+
+        $category->delete();
+        return response()->json(['message' => 'Category deleted successfully'], 200);
     }
 }
