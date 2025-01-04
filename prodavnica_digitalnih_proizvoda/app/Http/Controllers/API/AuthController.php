@@ -47,6 +47,7 @@ class AuthController extends Controller
 
 
     public function login(Request $request) {
+
       if(!Auth::attempt($request->only('email','password')))  
          return response()->json(['message'=>'Unauthorized'],401);
 
@@ -56,7 +57,7 @@ class AuthController extends Controller
       
         return response()->json(['message'=>'Hello, '.$user->name.', welcome to home.','access_token'=>$token,'token_type'=>'Bearer']) ;
    
-   
+
     }
 
     public function logout() {

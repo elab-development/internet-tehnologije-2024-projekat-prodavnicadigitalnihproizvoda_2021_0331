@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Cart;
+use App\Models\Picture;
 
 class CartController extends Controller
 {
@@ -22,8 +23,7 @@ class CartController extends Controller
     public function add(Request $request)
     {
         $validated = $request->validate([
-            'picture_id' => 'required|exists:pictures,id',
-            
+            'picture_id' => 'required|exists:pictures,id', 
             
         ]);
 
@@ -62,4 +62,24 @@ class CartController extends Controller
         Cart::where('user_id', auth()->id())->delete();
         return response()->json(['message' => 'Checkout complete'], 200);
     }
+
+    
+
+    public function downloadHighRes($id)
+{
+    $cart = Cart::where('user_id', auth()->id())
+        ->where('picture_id', $id)
+        ->first();
+
+    if (!$cart) {
+        return response()->json(['error' => 'Unauthorized'], 403);
+    }
+
+    $picture = Picture::find($id);
+    if (!$picture) {
+        return response()->json(['error' => 'Picture not found'], 404);
+    }
+
+    return response()->download(public_path($picture->high_res_path));
+}
 }

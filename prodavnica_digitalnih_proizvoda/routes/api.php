@@ -56,14 +56,11 @@ Route::get('pictures/{id}/high-res', [PictureController::class, 'showHighRes'])-
 
 
 //USERS
-Route::get('/users', [UserController::class, 'index']);
-Route::get('/users/{id}', [UserController::class, 'show']);
-//->middleware('auth:sanctum');
+Route::get('/users', [UserController::class, 'index'])->middleware('auth:sanctum');
+Route::get('/users/{id}', [UserController::class, 'show'])->middleware('auth:sanctum');
 
 
 //CATEGORY
-// Route::resource('categories', CategoryController::class)->except(['create', 'edit']);
-//Route::get('categories/{category}/pictures', [CategoryController::class, 'pictures']);
 Route::get('/categories', [CategoryController::class, 'index']);
 Route::get('/categories/{id}', [CategoryController::class, 'show']);
 Route::post('/categories', [CategoryController::class, 'store'])->middleware('auth:sanctum');
@@ -76,6 +73,7 @@ Route::get('/paginate', [PictureController::class, 'paginate_pictures']);
 
 
 //CART
+
 // Route::middleware('auth:sanctum')->group(function () {
 //     Route::post('/purchase', [PurchaseController::class, 'store']);
 //     Route::get('/purchases', [PurchaseController::class, 'index']);
@@ -83,10 +81,12 @@ Route::get('/paginate', [PictureController::class, 'paginate_pictures']);
 //Route::post('/purchase', [PurchaseController::class, 'purchase'])->middleware('auth:sanctum');
 
 
-Route::get('/cart', [CartController::class, 'index']);
-Route::post('/cart', [CartController::class, 'add']);
-Route::delete('/cart/{id}', [CartController::class, 'remove']);
-Route::post('/cart/checkout', [CartController::class, 'checkout']);
+Route::get('/cart', [CartController::class, 'index'])->middleware('auth:sanctum');
+Route::post('/cart', [CartController::class, 'add'])->middleware('auth:sanctum');
+Route::delete('/cart/{id}', [CartController::class, 'remove'])->middleware('auth:sanctum');
+Route::post('/cart/checkout', [CartController::class, 'checkout'])->middleware('auth:sanctum');
+Route::get('/cart/{id}/download', [CartController::class, 'downloadHighRes'])->middleware('auth:sanctum');
+
 
 
 
