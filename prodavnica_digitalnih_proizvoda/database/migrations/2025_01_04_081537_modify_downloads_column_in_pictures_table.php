@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('pictures', function (Blueprint $table) {
-            $table->foreignId('category_id');
+            $table->unsignedBigInteger('downloads')->default(0)->change();
         });
     }
 
@@ -26,7 +26,7 @@ return new class extends Migration
     public function down()
     {
         Schema::table('pictures', function (Blueprint $table) {
-            $table->dropForeign('category_id');
+            $table->bigInteger('downloads')->default(0)->change();
         });
     }
 };
