@@ -45,6 +45,7 @@ Route::group([], function () {
     Route::get('pictures/{id}/low-res', [PictureController::class, 'showLowRes']); 
     Route::get('/categories', [CategoryController::class, 'index']); 
     Route::get('/categories/{id}', [CategoryController::class, 'show']); 
+
 });
  
 // ------------------------------------
@@ -71,6 +72,7 @@ Route::group(['middleware' => ['auth:sanctum', 'role:admin']], function () {
     Route::delete('/categories/{id}', [CategoryController::class, 'destroy']); 
     Route::get('/users', [UserController::class, 'index']); 
     Route::get('/users/{id}', [UserController::class, 'show']); 
+    Route::post('/pictures/upload', [PictureController::class, 'upload']);
 });
  
 // ------------------------------------
