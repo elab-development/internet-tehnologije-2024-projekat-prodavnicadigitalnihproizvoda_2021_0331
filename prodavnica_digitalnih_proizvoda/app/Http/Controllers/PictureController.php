@@ -164,4 +164,33 @@ public function showHighRes($id)
     ], 200);
 }
 
+public function upload(Request $request)
+    {
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string|max:500',
+            'category_id' => 'required|exists:categories,id',
+            'high_res_file' => 'required|file|mimes:jpeg,png,jpg|max:5120', 
+            'low_res_file' => 'required|file|mimes:jpeg,png,jpg|max:2048', 
+            'price' => 'required|numeric|min:0',
+        ]);
+ 
+        $highResPath = $request->file('high_res_file')->move(public_path('images/high_res'), $request->file('high_res_file')->getClientOriginalName());
+        $lowResPath = $request->file('low_res_file')->move(public_path('images/low_res'), $request->file('low_res_file')->getClientOriginalName());
+
+        $picture = Picture::create([
+            'title' => $validated['title'],
+            'description' => $validated['description'],
+            'category_id' => $validated['category_id'],
+            'high_res_path' => 'images/high_res/' . $request->file('high_res_file')->getClientOriginalName(),
+            'low_res_path' => 'images/low_res/' . $request->file('low_res_file')->getClientOriginalName(),
+            'price' => $validated['price'],
+        ]);
+ 
+        return response()->json(['message' => 'Picture uploaded successfully', 'picture' => $picture], 201);
+    }
+
+
+
+
 }

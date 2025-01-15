@@ -12,6 +12,7 @@ class Cart extends Model
     protected $fillable = [
         'user_id',
         'picture_id',
+        'price_to_pay',
     ];
 
     public function user() {

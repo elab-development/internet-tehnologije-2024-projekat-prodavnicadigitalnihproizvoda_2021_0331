@@ -13,6 +13,7 @@ use App\Http\Resources\PictureResource;
 
 
 
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -24,70 +25,57 @@ use App\Http\Resources\PictureResource;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
-});
+ });
 
 //------------------------------------
 
+// Rute za autentifikaciju
+Route::post('/register', [AuthController::class, 'register']);
+Route::post('/login', [AuthController::class, 'login']);
+ 
+// ------------------------------------
+// Rute za sve korisnike (neulogovani korisnici)
+Route::group([], function () {
+    Route::get('pictures', [PictureController::class, 'index']);
+    Route::get('pictures/search/{title}', [PictureController::class, 'searchByTitle']); 
+    Route::get('categories/{category}/pictures', [PictureController::class, 'searchByCategory']); 
+    Route::get('pictures/under/{price}', [PictureController::class, 'searchByPrice']); 
+    Route::get('pictures/{id}/low-res', [PictureController::class, 'showLowRes']); 
+    Route::get('/categories', [CategoryController::class, 'index']); 
+    Route::get('/categories/{id}', [CategoryController::class, 'show']); 
 
-Route::post('/register',[AuthController::class,'register']);
-Route::post('/login',[AuthController::class,'login']);
-
-Route::group(['middleware'=>['auth:sanctum']],function(){
-    Route::get('/profile',function(Request $request){
+});
+ 
+// ------------------------------------
+// Rute za ulogovane korisnike
+Route::group(['middleware' => ['auth:sanctum','role:user']], function () {
+    Route::post('/logout', [AuthController::class, 'logout']); 
+ 
+    Route::get('/profile', function (Request $request) {
         return auth()->user();
     });
-    Route::resource('pictures',PictureController::class)->only(['update','store','destroy']);
-    Route::post('/logout',[AuthController::class,'logout']);
+ 
+    Route::get('/cart', [CartController::class, 'index']); 
+    Route::post('/cart', [CartController::class, 'add']); 
+    Route::delete('/cart/{id}', [CartController::class, 'remove']); 
+    Route::post('/cart/checkout', [CartController::class, 'checkout']); 
+    Route::get('/cart/{id}/download', [CartController::class, 'downloadHighRes']); 
 });
-
-
-
-
-
-//PICTURES
-Route::resource('pictures',PictureController::class)->only(['index']);
-Route::get('pictures/search/{title}', [PictureController::class, 'searchByTitle']);
-Route::get('categories/{category}/pictures', [PictureController::class, 'searchByCategory']);
-Route::get('pictures/under/{price}', [PictureController::class, 'searchByPrice']);
-Route::get('pictures/{id}/low-res', [PictureController::class, 'showLowRes']);
-Route::get('pictures/{id}/high-res', [PictureController::class, 'showHighRes'])->middleware('auth:sanctum');
-
-
-//USERS
-Route::get('/users', [UserController::class, 'index'])->middleware('auth:sanctum');
-Route::get('/users/{id}', [UserController::class, 'show'])->middleware('auth:sanctum');
-
-
-//CATEGORY
-Route::get('/categories', [CategoryController::class, 'index']);
-Route::get('/categories/{id}', [CategoryController::class, 'show']);
-Route::post('/categories', [CategoryController::class, 'store'])->middleware('auth:sanctum');
-Route::delete('/categories/{id}', [CategoryController::class, 'destroy'])->middleware('auth:sanctum');
-
-
-//PAGINACIJA
+ 
+// ------------------------------------
+// Rute za administratore
+Route::group(['middleware' => ['auth:sanctum', 'role:admin']], function () {
+    Route::resource('pictures', PictureController::class)->only(['store', 'update', 'destroy']); 
+    Route::post('/categories', [CategoryController::class, 'store']); 
+    Route::delete('/categories/{id}', [CategoryController::class, 'destroy']); 
+    Route::get('/users', [UserController::class, 'index']); 
+    Route::get('/users/{id}', [UserController::class, 'show']); 
+    Route::post('/pictures/upload', [PictureController::class, 'upload']);
+});
+ 
+// ------------------------------------
+// Paginate ruta
 Route::get('/paginate', [PictureController::class, 'paginate_pictures']);
-
-
-
-//CART
-
-// Route::middleware('auth:sanctum')->group(function () {
-//     Route::post('/purchase', [PurchaseController::class, 'store']);
-//     Route::get('/purchases', [PurchaseController::class, 'index']);
-// });
-//Route::post('/purchase', [PurchaseController::class, 'purchase'])->middleware('auth:sanctum');
-
-
-Route::get('/cart', [CartController::class, 'index'])->middleware('auth:sanctum');
-Route::post('/cart', [CartController::class, 'add'])->middleware('auth:sanctum');
-Route::delete('/cart/{id}', [CartController::class, 'remove'])->middleware('auth:sanctum');
-Route::post('/cart/checkout', [CartController::class, 'checkout'])->middleware('auth:sanctum');
-Route::get('/cart/{id}/download', [CartController::class, 'downloadHighRes'])->middleware('auth:sanctum');
-
-
-
-
 

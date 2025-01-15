@@ -27,12 +27,20 @@ class CartController extends Controller
             
         ]);
 
+        $picture = Picture::find($validated['picture_id']);   
+
+        if (!$picture) {   
+             return response()->json(['error' => 'Picture not found'], 404); 
+        }
+
         $cart = Cart::create([
             'user_id' => auth()->id(),
             'picture_id' => $validated['picture_id'],
+            'price_to_pay'=>$picture->price,
+
         ]);
 
-        return response()->json(['message' => 'Item added to cart', 'cart' => $cart], 201);
+        return response()->json(['message' => 'Item bought', 'cart' => $cart], 201);
     }
 
     public function remove($id)
@@ -49,19 +57,30 @@ class CartController extends Controller
     }
 
     public function checkout()
-    {
-
-        $cart = Cart::where('user_id', auth()->id())->get();
-
-        if ($cart->isEmpty()) {
-            return response()->json(['message' => 'Cart is empty'], 200);
-        }
-
-        // Process purchase logic here...
-
-        Cart::where('user_id', auth()->id())->delete();
-        return response()->json(['message' => 'Checkout complete'], 200);
+{
+    $cart = Cart::where('user_id', auth()->id())->get();
+ 
+    if ($cart->isEmpty()) {
+        return response()->json(['message' => 'Cart is empty'], 200);
     }
+ 
+    $totalPrice = $cart->sum('price_to_pay');
+ 
+    $paymentSuccessful = true;
+ 
+    if ($paymentSuccessful) {
+        Cart::where('user_id', auth()->id())->delete();
+ 
+        return response()->json([
+            'message' => 'Checkout complete. Thank you for your purchase!',
+            'total_price' => $totalPrice,
+        ], 200);
+    } else {
+        return response()->json([
+            'error' => 'Payment failed. Please try again later.'
+        ], 500);
+    }
+}
 
     
 

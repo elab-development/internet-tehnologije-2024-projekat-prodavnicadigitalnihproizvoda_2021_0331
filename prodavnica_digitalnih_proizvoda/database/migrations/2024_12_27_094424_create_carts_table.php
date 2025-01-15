@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('carts', function (Blueprint $table) {
             $table->id();
-            $table->decimal('price_to_pay', 20, 2)->default(0);
+            $table->decimal('price_to_pay', 20, 2);
             $table->timestamps();
         });
     }
