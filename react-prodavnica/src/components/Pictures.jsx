@@ -1,13 +1,12 @@
 import React from 'react';
 import OnePicture from './OnePicture.jsx';
 
-const Pictures=()=> {
+const Pictures=({pictures, onAdd})=> {
   return (
     <div className="all-products">
-        <OnePicture />
-        <OnePicture />
-        <OnePicture />
-        
+    {pictures.map((pic) => ( 
+      <OnePicture picture = {pic} key={pic.id} onAdd={onAdd} inCart={1}/>
+    ))}
     </div>
   );
 };

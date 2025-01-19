@@ -1,10 +1,10 @@
 .navBar {
   display: flex;
   flex-direction: row;
-  background-color: rgb(211, 211, 211);
+  background-color: rgb(176, 177, 235);
   border-bottom-style: solid;
   border-bottom-width: 2px;
-  border-bottom-color: rgb(175, 175, 175);
+  border-bottom-color: rgb(131, 138, 235);
   align-items: center;
   min-height: 40px;
   padding-left: 25px;
@@ -32,6 +32,7 @@
   
  .all-products {
   display: flex;
+  justify-content: center;
   margin: 20px;
  }
   
@@ -40,7 +41,7 @@
   border-width: 2px;
   border-color: rgb(211, 211, 211);
   border-radius: 10px;
-  max-width: 200px;
+  max-width: 400px;
  }
   
  .card-img-top {
@@ -53,8 +54,8 @@
  }
   
  .btn {
-  background-color: cornflowerblue;
-  color: white;
+  background-color: rgb(176, 177, 235);
+  color: black;
   padding-top: 10px;
   padding-bottom: 5px;
   padding-left: 10px;

@@ -1,13 +1,42 @@
 import React from 'react'
+import { FaShoppingCart } from "react-icons/fa";
+import {Link} from "react-router-dom";
 
-function NavBar(){
+function NavBar({cartNum}){
+    
     return(
-        <div className="navBar">
-        <a>My store</a> 
-        <div className="cart-items"> 
-            <p className="cart-num">0</p>
-        </div>
-        </div>
+        // <div className="navBar">
+        // <Link to="/">My store</Link> 
+        // <Link to="/cart" className="cart-items"> 
+        //     <FaShoppingCart />
+        //     <p className="cart-num">{cartNum}</p>
+        // </Link>
+        // </div>
+
+
+        <nav className="navbar navbar-expand-xl navbar-light bg-light">
+  <div className="container-fluid">
+    <a className="navbar-brand" href="#">Digital art store</a>
+    <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarBasic" aria-controls="navbarBasic" aria-expanded="false" aria-label="Toggle navigation">
+      <span className="navbar-toggler-icon"></span>
+    </button>
+    <div className="collapse navbar-collapse show" id="navbarBasic">
+      <ul className="navbar-nav me-auto mb-2 mb-xl-0">
+        <li className="nav-item">
+          <a className="nav-link active" aria-current="page" href="/gallery">Gallery</a>
+        </li>
+        <li className="nav-item">
+
+          <a className="nav-link" href="/login">Login</a>
+        </li>
+      </ul>
+      <form className="d-flex">
+        <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search"></input>
+        <button className="btn btn-outline-success" type="submit">Search</button>
+      </form>
+    </div>
+  </div>
+</nav>
     );
 }
 
