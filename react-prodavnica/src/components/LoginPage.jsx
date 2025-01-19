@@ -20,75 +20,74 @@ const LoginPage = () => {
     }
 
   return (
-    <section 
-    className='vh-100' 
-    style={{
-        paddingTop:4.5+"rem",
-    }}
-        >
+    <section className="vh-100">
+  <div className="container-fluid">
+    <div className="row">
+      <div className="col-sm-6 text-black">
+        <div className="d-flex align-items-center h-custom-2 px-5 ms-xl-4 mt-5 pt-5 pt-xl-0 mt-xl-n5">
+          <form onSubmit={handleLogin} style={{ width: "23rem" }}>
+            <h3
+              className="fw-normal mb-3 pb-3"
+              style={{ letterSpacing: "1px" }}
+            >
+              Log in
+            </h3>
 
-    <div className="container-fluid h-custom">
-        <div className="row d-flex justify-content-center align-items-center h-100">
-            <div className="col-md-9 col-lg-6 col-xl-5">
-                <img
-                    src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.webp"
-                    className="img-fluid"
-                    alt="Sample image"
-                />
+            <div data-mdb-input-init className="form-outline mb-4">
+              <input
+                type="email"
+                id="form2Example18"
+                className="form-control form-control-lg"
+                onInput={handleInput} 
+              />
+              <label className="form-label" htmlFor="form2Example18">
+                Email address
+              </label>
             </div>
-            <div className="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
-                <form onSubmit={handleLogin}>
-                    <div className="form-outline mb-4">
-                        <input
-                            type="email"
-                            id="form3Example3"
-                            className="form-control form-control-lg"
-                            placeholder="Enter a valid email address"
-                            name="email"
-                            onInput={handleInput} 
-                        />
-                        <label className="form-label" htmlFor="form3Example3">
-                            Email address
-                        </label>
-                    </div>
 
-                    <div className="form-outline mb-3">
-                        <input 
-                        type="password"
-                        id="form3Example4"
-                        className="form-control form-control-lg"
-                        placeholder="Enter password"
-                        name="password"
-                        onInput={handleInput} 
-                        />
-                        <label className="form-label" htmlFor="form3Example4">
-                            Password
-                        </label>
-                    </div>
-
-                    <div className="text-center text-lg-start mt-4 pt-2">
-                        <button 
-                        type="submit"
-                        className="btn btn-primary btn-lg"
-                        style={{
-                            paddingLeft:2.5+"rem",
-                            paddingRight:2.5+"rem",
-                        }}
-                        >
-                            Login
-                        </button>
-                        <p className="small fw-bold mt-2 pt-1 mb-0">
-                            Don't have an account?{" "}
-                            <a href='/register' className="link-danger">
-                                Register
-                            </a>
-                        </p>
-                    </div>
-                </form>
+            <div data-mdb-input-init className="form-outline mb-4">
+              <input
+                type="password"
+                id="form2Example28"
+                className="form-control form-control-lg"
+                onInput={handleInput} 
+              />
+              <label className="form-label" htmlFor="form2Example28">
+                Password
+              </label>
             </div>
+
+            <div className="pt-1 mb-4">
+              <button
+                data-mdb-button-init
+                data-mdb-ripple-init
+                className="btn btn-info btn-lg btn-block"
+                type="submit"
+              >
+                Login
+              </button>
+            </div>
+            <p>
+              Don't have an account?{" "}
+              <a href="/register" className="link-info">
+                Register here
+              </a>
+            </p>
+          </form>
         </div>
+      </div>
+      <div className="col-sm-6 px-0 d-none d-sm-block">
+        <img
+        src="/img/login.jpg"
+          alt="Login"
+          className="w-60 vh-57"
+          style={{ objectFit: "cover", objectPosition: "left" }}
+        />
+      </div>
     </div>
-    </section>
+  </div>
+</section>
+
   );
 }
 

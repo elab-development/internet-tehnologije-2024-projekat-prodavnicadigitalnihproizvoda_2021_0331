@@ -31,8 +31,8 @@ const RegisterPage = () => {
     <div className="container-fluid h-custom">
         <div className="row d-flex justify-content-center align-items-center h-100">
             <div className="col-md-9 col-lg-6 col-xl-5">
-                <img
-                    src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-registration/draw1.webp"
+                <img                   
+                    src="/img/registration.jpg"
                     className="img-fluid"
                     alt="Sample image"
                 />
@@ -79,6 +79,16 @@ const RegisterPage = () => {
                         <label className="form-label" htmlFor="form3Example4">
                             Password
                         </label>
+                    </div>
+
+                    <div className="form-outline mb-3">
+                        <input 
+                        type="repeatedPassword"
+                        id="form3Example5"
+                        className="form-control form-control-lg"
+                        placeholder="Repeat your password"
+                        name="repeatedPassword"
+                        />
                     </div>
 
                     <div className="text-center text-lg-start mt-4 pt-2">
