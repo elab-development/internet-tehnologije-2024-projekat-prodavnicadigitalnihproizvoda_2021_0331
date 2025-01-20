@@ -48,7 +48,6 @@ function App() {
   }
 
   function addPicture(title, id, amount) {
-    console.log("Dodata slika: " + title);
     if (amount === 1) {
       return;
     } else {
@@ -68,6 +67,7 @@ function App() {
     if (cartNum === 0) {
       return;
     }
+
     setCartNum(cartNum - 1);
     setCartPictures(cartPictures.filter((pic) => pic.id !== id));
 
@@ -79,6 +79,11 @@ function App() {
         return pic;
       })
     );
+  }
+
+  function updateCartNum(num) {
+    setCartNum(num);
+    setCartPictures([]);
   }
 
   return (
@@ -94,7 +99,13 @@ function App() {
         />
         <Route
           path="/cart"
-          element={<Cart pictures={cartPictures} remove={removePicture} />}
+          element={
+            <Cart
+              pictures={cartPictures}
+              remove={removePicture}
+              updateCartNum={updateCartNum}
+            />
+          }
         />
       </Routes>
     </BrowserRouter>

@@ -1,8 +1,9 @@
 import React from "react";
-//import { FaShoppingCart } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { FaShoppingCart } from "react-icons/fa";
+import { Link, useLocation } from "react-router-dom";
 
 function NavBar({ cartNum }) {
+  const location = useLocation();
   return (
     <nav className="navbar navbar-expand-xl navbar-light bg-light">
       <div className="container-fluid">
@@ -25,37 +26,44 @@ function NavBar({ cartNum }) {
             <li className="nav-item">
               <Link
                 to="/gallery"
-                className="nav-link active"
-                aria-current="page"
+                className={`nav-link ${
+                  location.pathname === "/gallery" ? "active" : ""
+                }`}
               >
                 Gallery
               </Link>
             </li>
+
             <li className="nav-item">
-              <a className="nav-link" href="/login">
-                Login
-              </a>
-            </li>
-            <li className="nav-item">
-              <Link to="/cart" className="nav-link active" aria-current="page">
-                Cart
+              <Link
+                to="/cart"
+                className={`nav-link ${
+                  location.pathname === "/cart" ? "active" : ""
+                }`}
+              >
+                <FaShoppingCart />
               </Link>
             </li>
             <li className="nav-item">
               <p className="cart-num">{cartNum}</p>
             </li>
           </ul>
-          <form className="d-flex">
-            <input
-              className="form-control me-2"
-              type="search"
-              placeholder="Search"
-              aria-label="Search"
-            ></input>
-            <button className="btn btn-outline-success" type="submit">
-              Search
-            </button>
-          </form>
+          {location.pathname === "/gallery" && (
+            <form className="d-flex">
+              <input
+                className="form-control me-2"
+                type="search"
+                placeholder="Search"
+                aria-label="Search"
+              />
+              <button className="btn btn-outline-success" type="submit">
+                Search
+              </button>
+            </form>
+          )}
+          <a className=" nav-item nav-link" href="/login">
+            Login
+          </a>
         </div>
       </div>
     </nav>

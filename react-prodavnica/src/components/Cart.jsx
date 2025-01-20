@@ -1,23 +1,48 @@
 import React from "react";
 import OnePicture from "./OnePicture";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FaTimes } from "react-icons/fa";
 import { useState } from "react";
-//const Cart = ({ pictures }) => {
-//return (
-// <div className="cart-container">
-//     <h3>This is your cart</h3>
-//     {pictures.map((pic) => (
-//   <OnePicture picture = {pic} key={pic.id} inCart={0}/>
-// ))}
-// </div>
 
-const Cart = ({ pictures, remove }) => {
+const Cart = ({ pictures, remove, updateCartNum }) => {
   const [cartItems, setCartItems] = useState(pictures);
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [paymentData, setPaymentData] = useState({});
+
+  const navigate = useNavigate();
+
   const handleRemove = (id) => {
     setCartItems(cartItems.filter((item) => item.id !== id));
   };
+
   const totalPrice = cartItems.reduce((total, pic) => total + pic.price, 0);
+
+  const handleBuyNow = (e) => {
+    e.preventDefault();
+    const form = e.target.form;
+    setPaymentData({
+      cardNumber: form.typeText.value,
+      cardName: form.typeName.value,
+      expiration: form.typeExp.value,
+      cvv: form.typeCvv.value,
+    });
+    setIsModalOpen(true);
+  };
+
+  const confirmPurchase = () => {
+    alert("Purchase confirmed!");
+    setIsModalOpen(false);
+    setCartItems([]);
+    updateCartNum(0);
+    pictures.forEach((pic) => (pic.amount = 0));
+    navigate("/gallery");
+  };
+
+  const cancelPurchase = () => {
+    setIsModalOpen(false);
+  };
+
   return (
     <section className="h-100 h-custom" style={{ backgroundColor: "#eee" }}>
       <div className="container h-100 py-5">
@@ -155,6 +180,7 @@ const Cart = ({ pictures, remove }) => {
                       <button
                         type="button"
                         className="btn btn-primary btn-block btn-lg"
+                        onClick={handleBuyNow}
                       >
                         Buy now
                       </button>
@@ -175,6 +201,53 @@ const Cart = ({ pictures, remove }) => {
           </div>
         </div>
       </div>
+
+      {isModalOpen && (
+        <div
+          className="modal fade show"
+          style={{ display: "block", backgroundColor: "rgba(0, 0, 0, 0.5)" }}
+        >
+          <div className="modal-dialog">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title">Confirm Purchase</h5>
+                <button
+                  type="button"
+                  className="btn-close"
+                  onClick={cancelPurchase}
+                ></button>
+              </div>
+              <div className="modal-body">
+                <p>
+                  Card Number: {paymentData.cardNumber}
+                  <br />
+                  Name on Card: {paymentData.cardName}
+                  <br />
+                  Expiration: {paymentData.expiration}
+                  <br />
+                  CVV: {paymentData.cvv}
+                </p>
+              </div>
+              <div className="modal-footer">
+                <button
+                  type="button"
+                  className="btn btn-primary"
+                  onClick={confirmPurchase}
+                >
+                  Confirm
+                </button>
+                <button
+                  type="button"
+                  className="btn btn-secondary"
+                  onClick={cancelPurchase}
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   );
 };
