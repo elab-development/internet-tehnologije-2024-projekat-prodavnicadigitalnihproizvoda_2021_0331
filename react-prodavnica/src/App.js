@@ -10,12 +10,23 @@ import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 function App() {
   const [cartNum, setCartNum] = useState(0);
   const [cartPictures, setCartPictures] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState("all");
+  const categories = ["Nature", "Portrait", "Abstract"];
+
+  const handleFilter = (category) => {
+    setSelectedCategory(category);
+  };
+
+  const resetCategory = () => {
+    setSelectedCategory("all");
+  };
 
   const [pictures, setPictures] = useState([
     {
       id: 1,
       title: "Picture 1",
       description: "Description 1",
+      category: "Nature",
       price: 2500,
       amount: 0,
     },
@@ -23,6 +34,7 @@ function App() {
       id: 2,
       title: "Picture 2",
       description: "Description 2",
+      category: "Nature",
       price: 1200,
       amount: 0,
     },
@@ -30,6 +42,7 @@ function App() {
       id: 3,
       title: "Picture 3",
       description: "Description 3",
+      category: "Portrait",
       price: 1000,
       amount: 0,
     },
@@ -37,7 +50,26 @@ function App() {
       id: 4,
       title: "Picture 4",
       description: "Description 4",
+      category: "Nature",
       price: 1250,
+      amount: 0,
+    },
+
+    {
+      id: 5,
+      title: "Picture 5",
+      description: "Description 5",
+      category: "Abstract",
+      price: 3000,
+      amount: 0,
+    },
+
+    {
+      id: 6,
+      title: "Picture 6",
+      description: "Description 6",
+      category: "Abstract",
+      price: 1200,
       amount: 0,
     },
   ]);
@@ -88,14 +120,25 @@ function App() {
 
   return (
     <BrowserRouter className="App">
-      <NavBar cartNum={cartNum}></NavBar>
+      <NavBar
+        cartNum={cartNum}
+        categories={categories}
+        onFilter={handleFilter}
+        selectedCategory={selectedCategory}
+      ></NavBar>
 
       <Routes>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route
           path="/gallery"
-          element={<Pictures pictures={pictures} onAdd={addPicture} />}
+          element={
+            <Pictures
+              pictures={pictures}
+              onAdd={addPicture}
+              selectedCategory={selectedCategory}
+            />
+          }
         />
         <Route
           path="/cart"
@@ -104,6 +147,7 @@ function App() {
               pictures={cartPictures}
               remove={removePicture}
               updateCartNum={updateCartNum}
+              resetCategory={resetCategory}
             />
           }
         />

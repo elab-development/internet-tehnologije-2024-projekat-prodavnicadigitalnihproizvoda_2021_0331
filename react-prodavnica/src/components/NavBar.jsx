@@ -2,8 +2,11 @@ import React from "react";
 import { FaShoppingCart } from "react-icons/fa";
 import { Link, useLocation } from "react-router-dom";
 
-function NavBar({ cartNum }) {
+function NavBar({ cartNum, categories, onFilter, selectedCategory }) {
   const location = useLocation();
+  const handleCategoryChange = (e) => {
+    onFilter(e.target.value);
+  };
   return (
     <nav className="navbar navbar-expand-xl navbar-light bg-light">
       <div className="container-fluid">
@@ -49,17 +52,34 @@ function NavBar({ cartNum }) {
             </li>
           </ul>
           {location.pathname === "/gallery" && (
-            <form className="d-flex">
-              <input
-                className="form-control me-2"
-                type="search"
-                placeholder="Search"
-                aria-label="Search"
-              />
-              <button className="btn btn-outline-success" type="submit">
-                Search
-              </button>
-            </form>
+            <>
+              <select
+                className="form-select w-auto"
+                onChange={handleCategoryChange}
+                value={selectedCategory}
+              >
+                <option value="" disabled>
+                  Filter by Category
+                </option>
+                <option value="all">All</option>
+                {categories.map((category, index) => (
+                  <option key={index} value={category}>
+                    {category}
+                  </option>
+                ))}
+              </select>
+              <form className="d-flex">
+                <input
+                  className="form-control me-2"
+                  type="search"
+                  placeholder="Search"
+                  aria-label="Search"
+                />
+                <button className="btn btn-outline-success" type="submit">
+                  Search
+                </button>
+              </form>
+            </>
           )}
           <a className=" nav-item nav-link" href="/login">
             Login

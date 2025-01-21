@@ -4,7 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { FaTimes } from "react-icons/fa";
 import { useState } from "react";
 
-const Cart = ({ pictures, remove, updateCartNum }) => {
+const Cart = ({ pictures, remove, updateCartNum, resetCategory }) => {
   const [cartItems, setCartItems] = useState(pictures);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -36,6 +36,7 @@ const Cart = ({ pictures, remove, updateCartNum }) => {
     setCartItems([]);
     updateCartNum(0);
     pictures.forEach((pic) => (pic.amount = 0));
+    resetCategory();
     navigate("/gallery");
   };
 
@@ -59,7 +60,6 @@ const Cart = ({ pictures, remove, updateCartNum }) => {
                       Your pictures
                     </h3>
 
-                    {/* Product 1 */}
                     {cartItems.map((picture, index) => (
                       <div
                         className="d-flex align-items-center mb-5"
@@ -96,7 +96,6 @@ const Cart = ({ pictures, remove, updateCartNum }) => {
                       </div>
                     ))}
 
-                    {/* Summary */}
                     <hr
                       className="mb-4"
                       style={{
@@ -111,7 +110,6 @@ const Cart = ({ pictures, remove, updateCartNum }) => {
                     </div>
                   </div>
 
-                  {/* Payment Section */}
                   <div className="col-lg-6 px-5 py-4">
                     <h3 className="mb-5 pt-2 text-center fw-bold text-uppercase">
                       Payment
