@@ -13,7 +13,9 @@ function OnePicture({ picture, onAdd, inCart }) {
         alt="Slika"
       />
       <div className="card-body">
-        <h3 className="card-title">{picture.title}</h3>
+        <h3 className="card-titleP" style={{ color: "#5e2c71" }}>
+          {picture.title}
+        </h3>
         <p className="card-text">{picture.description}.</p>
         <p className="card-price">{picture.price} EUR</p>
       </div>
@@ -21,6 +23,11 @@ function OnePicture({ picture, onAdd, inCart }) {
         <button
           className="btnP"
           onClick={() => onAdd(picture.title, picture.id, picture.amount)}
+          style={{
+            backgroundColor: "black",
+            borderColor: "black",
+            color: "white",
+          }}
         >
           Add to cart
         </button>

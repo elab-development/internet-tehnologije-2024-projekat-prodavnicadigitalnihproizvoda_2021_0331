@@ -83,7 +83,7 @@ const Cart = ({ pictures, remove, updateCartNum, resetCategory }) => {
                             }}
                           >
                             <i className="fas fa-times">
-                              <FaTimes />
+                              <FaTimes color="red" />
                             </i>
                           </a>
                           <h5 className="text-primary">{picture.title}</h5>
@@ -100,13 +100,20 @@ const Cart = ({ pictures, remove, updateCartNum, resetCategory }) => {
                       className="mb-4"
                       style={{
                         height: "2px",
-                        backgroundColor: "#1266f1",
+                        backgroundColor: "black",
                         opacity: "1",
                       }}
                     />
-                    <div className="d-flex justify-content-between p-2 mb-2 bg-primary">
-                      <h5 className="fw-bold mb-0">Total:</h5>
-                      <h5 className="fw-bold mb-0">{totalPrice}$</h5>
+                    <div
+                      className="d-flex justify-content-between p-2 mb-2"
+                      style={{ backgroundColor: "black" }}
+                    >
+                      <h5 className="fw-bold mb-0" style={{ color: "white" }}>
+                        Total:
+                      </h5>
+                      <h5 className="fw-bold mb-0" style={{ color: "white" }}>
+                        {totalPrice}$
+                      </h5>
                     </div>
                   </div>
 
@@ -179,6 +186,10 @@ const Cart = ({ pictures, remove, updateCartNum, resetCategory }) => {
                         type="button"
                         className="btn btn-primary btn-block btn-lg"
                         onClick={handleBuyNow}
+                        style={{
+                          backgroundColor: "black",
+                          borderColor: "black",
+                        }}
                       >
                         Buy now
                       </button>

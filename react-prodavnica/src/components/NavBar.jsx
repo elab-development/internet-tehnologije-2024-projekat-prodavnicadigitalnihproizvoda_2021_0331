@@ -2,10 +2,13 @@ import React from "react";
 import { FaShoppingCart } from "react-icons/fa";
 import { Link, useLocation } from "react-router-dom";
 
-function NavBar({ cartNum, categories, onFilter, selectedCategory }) {
+function NavBar({ cartNum, categories, onFilter, selectedCategory, onSearch }) {
   const location = useLocation();
   const handleCategoryChange = (e) => {
     onFilter(e.target.value);
+  };
+  const handleSearchChange = (e) => {
+    onSearch(e.target.value);
   };
   return (
     <nav className="navbar navbar-expand-xl navbar-dark bg-dark">
@@ -52,7 +55,7 @@ function NavBar({ cartNum, categories, onFilter, selectedCategory }) {
             </li>
           </ul>
           {location.pathname === "/gallery" && (
-            <>
+            <div className="d-flex gap-3">
               <select
                 className="form-select w-auto"
                 onChange={handleCategoryChange}
@@ -74,12 +77,10 @@ function NavBar({ cartNum, categories, onFilter, selectedCategory }) {
                   type="search"
                   placeholder="Search"
                   aria-label="Search"
+                  onChange={handleSearchChange}
                 />
-                <button className="btn btn-outline-success" type="submit">
-                  Search
-                </button>
               </form>
-            </>
+            </div>
           )}
           <a className=" nav-item nav-link" href="/login">
             Login
