@@ -184,7 +184,10 @@ const Cart = ({ pictures, remove, updateCartNum, resetCategory }) => {
                       </button>
                       <h5
                         className="fw-bold mb-5"
-                        style={{ position: "absolute", bottom: 0 }}
+                        style={{
+                          position: "absolute",
+                          bottom: 0,
+                        }}
                       >
                         <Link to="/gallery">
                           <i className="fas fa-angle-left me-2"></i>Back to

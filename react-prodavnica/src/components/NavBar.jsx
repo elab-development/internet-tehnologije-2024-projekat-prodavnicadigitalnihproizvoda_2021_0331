@@ -8,9 +8,9 @@ function NavBar({ cartNum, categories, onFilter, selectedCategory }) {
     onFilter(e.target.value);
   };
   return (
-    <nav className="navbar navbar-expand-xl navbar-light bg-light">
+    <nav className="navbar navbar-expand-xl navbar-dark bg-dark">
       <div className="container-fluid">
-        <a className="navbar-brand" href="#">
+        <a className="navbar-brand" href="/">
           Digital art store
         </a>
         <button

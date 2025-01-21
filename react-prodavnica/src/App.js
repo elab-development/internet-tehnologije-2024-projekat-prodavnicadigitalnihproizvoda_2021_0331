@@ -4,6 +4,8 @@ import NavBar from "./components/NavBar";
 import Pictures from "./components/Pictures";
 import LoginPage from "./components/LoginPage";
 import RegisterPage from "./components/RegisterPage";
+import HomePage from "./components/HomePage";
+import Footer from "./components/Footer";
 import { useState } from "react";
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 
@@ -128,6 +130,7 @@ function App() {
       ></NavBar>
 
       <Routes>
+        <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route
@@ -152,6 +155,7 @@ function App() {
           }
         />
       </Routes>
+      <Footer />
     </BrowserRouter>
   );
 }
