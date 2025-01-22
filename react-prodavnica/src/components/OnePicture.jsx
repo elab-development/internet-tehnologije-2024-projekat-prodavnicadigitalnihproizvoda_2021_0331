@@ -1,39 +1,59 @@
 import React from "react";
-import { FaPlus } from "react-icons/fa";
+import { FaHeart, FaRegHeart } from "react-icons/fa";
 
-function OnePicture({ picture, onAdd, inCart }) {
+function OnePicture({
+  picture,
+  onAdd,
+  onPictureClick,
+  isFavorite,
+  toggleFavorite,
+}) {
   return (
-    <div
-      className={inCart === 1 ? "cardP" : "card-cart"}
-      style={{ margin: 2 + "em" }}
-    >
-      <img
-        className={inCart === 1 ? "cardP-img-top" : "card-img-left"}
-        src="https:/picsum.photos/200"
-        alt="Slika"
-      />
-      <div className="card-body">
-        <h3 className="card-titleP" style={{ color: "#5e2c71" }}>
-          {picture.title}
-        </h3>
-        <p className="card-text">{picture.description}.</p>
-        <p className="card-price">{picture.price} EUR</p>
+    <div className="card">
+      <div
+        className="bg-image hover-zoom ripple ripple-surface ripple-surface-light"
+        data-mdb-ripple-color="light"
+        onClick={() => onPictureClick(picture)}
+        style={{ cursor: "pointer" }}
+      >
+        <img
+          src="https:/picsum.photos/200"
+          className="w-100"
+          alt={picture.title}
+        />
+        <a href="#!">
+          <div className="mask"></div>
+          <div className="hover-overlay">
+            <div
+              className="mask"
+              style={{
+                backgroundColor: "rgba(251, 251, 251, 0.15)",
+              }}
+            ></div>
+          </div>
+        </a>
       </div>
-      {inCart === 1 ? (
+      <div className="card-body">
+        <div className="d-flex justify-content-between align-items-center">
+          <h5 className="card-title mb-2">{picture.title}</h5>
+          <button
+            className="btn btn-link p-0"
+            onClick={() => toggleFavorite(picture)}
+            style={{ color: isFavorite ? "red" : "gray" }}
+          >
+            {isFavorite ? <FaHeart /> : <FaRegHeart />}
+          </button>
+        </div>
+        <p>Category: {picture.category}</p>
+
+        <h6 className="mb-3">{picture.price}$</h6>
         <button
-          className="btnP"
+          className="btn btn-primary"
           onClick={() => onAdd(picture.title, picture.id, picture.amount)}
-          style={{
-            backgroundColor: "black",
-            borderColor: "black",
-            color: "white",
-          }}
         >
-          Add to cart
+          Add to Cart
         </button>
-      ) : (
-        <></>
-      )}
+      </div>
     </div>
   );
 }

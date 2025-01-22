@@ -42,6 +42,17 @@ function NavBar({ cartNum, categories, onFilter, selectedCategory, onSearch }) {
 
             <li className="nav-item">
               <Link
+                to="/favorites"
+                className={`nav-link ${
+                  location.pathname === "/favorites" ? "active" : ""
+                }`}
+              >
+                Favorites
+              </Link>
+            </li>
+
+            <li className="nav-item">
+              <Link
                 to="/cart"
                 className={`nav-link ${
                   location.pathname === "/cart" ? "active" : ""
@@ -77,7 +88,7 @@ function NavBar({ cartNum, categories, onFilter, selectedCategory, onSearch }) {
                   type="search"
                   placeholder="Search"
                   aria-label="Search"
-                  onChange={handleSearchChange}
+                  onChange={(e) => handleSearchChange(e)}
                 />
               </form>
             </div>

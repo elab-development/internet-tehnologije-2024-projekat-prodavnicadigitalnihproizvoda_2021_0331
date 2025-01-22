@@ -6,21 +6,48 @@ import LoginPage from "./components/LoginPage";
 import RegisterPage from "./components/RegisterPage";
 import HomePage from "./components/HomePage";
 import Footer from "./components/Footer";
+import Modal from "./components/Modal";
+import Favorites from "./components/Favorites";
 import { useState } from "react";
-import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 function App() {
+  const categories = ["Nature", "Portrait", "Abstract"];
   const [cartNum, setCartNum] = useState(0);
   const [cartPictures, setCartPictures] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("all");
-  const categories = ["Nature", "Portrait", "Abstract"];
+  const [searchText, setSearchText] = useState("");
+  const [selectedPicture, setSelectedPicture] = useState(null);
+
+  const [favorites, setFavorites] = useState([]);
+
+  const toggleFavorite = (picture) => {
+    setFavorites((prevFavorites) =>
+      prevFavorites.find((fav) => fav.id === picture.id)
+        ? prevFavorites.filter((fav) => fav.id !== picture.id)
+        : [...prevFavorites, picture]
+    );
+  };
 
   const handleFilter = (category) => {
     setSelectedCategory(category);
   };
 
+  const handleSearch = (text) => {
+    setSearchText(text);
+  };
+
   const resetCategory = () => {
     setSelectedCategory("all");
+  };
+
+  const resetSearch = () => {
+    setSearchText("");
+    setSelectedCategory("all");
+  };
+
+  const closeModal = () => {
+    setSelectedPicture(null);
   };
 
   const [pictures, setPictures] = useState([
@@ -34,7 +61,7 @@ function App() {
     },
     {
       id: 2,
-      title: "Picture 2",
+      title: "LALALALAL",
       description: "Description 2",
       category: "Nature",
       price: 1200,
@@ -50,7 +77,7 @@ function App() {
     },
     {
       id: 4,
-      title: "Picture 4",
+      title: "Picture 31",
       description: "Description 4",
       category: "Nature",
       price: 1250,
@@ -127,7 +154,8 @@ function App() {
         categories={categories}
         onFilter={handleFilter}
         selectedCategory={selectedCategory}
-      ></NavBar>
+        onSearch={handleSearch}
+      />
 
       <Routes>
         <Route path="/" element={<HomePage />} />
@@ -140,6 +168,10 @@ function App() {
               pictures={pictures}
               onAdd={addPicture}
               selectedCategory={selectedCategory}
+              searchText={searchText}
+              onPictureClick={setSelectedPicture}
+              favorites={favorites}
+              toggleFavorite={toggleFavorite}
             />
           }
         />
@@ -151,10 +183,27 @@ function App() {
               remove={removePicture}
               updateCartNum={updateCartNum}
               resetCategory={resetCategory}
+              resetSearch={resetSearch}
+            />
+          }
+        />
+
+        <Route
+          path="/favorites"
+          element={
+            <Favorites
+              favorites={favorites}
+              onAdd={addPicture}
+              toggleFavorite={toggleFavorite}
             />
           }
         />
       </Routes>
+
+      {selectedPicture && (
+        <Modal picture={selectedPicture} onClose={closeModal} />
+      )}
+
       <Footer />
     </BrowserRouter>
   );

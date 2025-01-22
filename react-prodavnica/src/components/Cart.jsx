@@ -1,10 +1,15 @@
 import React from "react";
-import OnePicture from "./OnePicture";
 import { Link, useNavigate } from "react-router-dom";
 import { FaTimes } from "react-icons/fa";
 import { useState } from "react";
 
-const Cart = ({ pictures, remove, updateCartNum, resetCategory }) => {
+const Cart = ({
+  pictures,
+  remove,
+  updateCartNum,
+  resetCategory,
+  resetSearch,
+}) => {
   const [cartItems, setCartItems] = useState(pictures);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -20,6 +25,14 @@ const Cart = ({ pictures, remove, updateCartNum, resetCategory }) => {
 
   const handleBuyNow = (e) => {
     e.preventDefault();
+
+    if (cartItems.length === 0) {
+      alert(
+        "Your cart is empty. Please add items before proceeding to purchase."
+      );
+      return;
+    }
+
     const form = e.target.form;
     setPaymentData({
       cardNumber: form.typeText.value,
@@ -37,6 +50,7 @@ const Cart = ({ pictures, remove, updateCartNum, resetCategory }) => {
     updateCartNum(0);
     pictures.forEach((pic) => (pic.amount = 0));
     resetCategory();
+    resetSearch();
     navigate("/gallery");
   };
 
@@ -45,8 +59,12 @@ const Cart = ({ pictures, remove, updateCartNum, resetCategory }) => {
   };
 
   return (
-    <section className="h-100 h-custom" style={{ backgroundColor: "#eee" }}>
-      <div className="container h-100 py-5">
+    <section
+      id="cart-section"
+      className="h-100 d-flex flex-column justify-content-between"
+      style={{ backgroundColor: "#eee", minHeight: "100vh" }}
+    >
+      <div className="container py-5">
         <div className="row d-flex justify-content-center align-items-center h-100">
           <div className="col">
             <div
@@ -222,7 +240,7 @@ const Cart = ({ pictures, remove, updateCartNum, resetCategory }) => {
           <div className="modal-dialog">
             <div className="modal-content">
               <div className="modal-header">
-                <h5 className="modal-title">Confirm Purchase</h5>
+                <h5 className="modal-title">Confirm Data</h5>
                 <button
                   type="button"
                   className="btn-close"

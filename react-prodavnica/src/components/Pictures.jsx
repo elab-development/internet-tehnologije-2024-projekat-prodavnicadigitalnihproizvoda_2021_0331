@@ -1,15 +1,25 @@
-import React from "react";
-import OnePicture from "./OnePicture.jsx";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
+import OnePicture from "./OnePicture";
 
-const Pictures = ({ pictures, onAdd, selectedCategory }) => {
+const Pictures = ({
+  pictures,
+  onAdd,
+  selectedCategory,
+  searchText,
+  onPictureClick,
+  favorites,
+  toggleFavorite,
+}) => {
   const itemsPerPage = 4;
   const [currentPage, setCurrentPage] = useState(1);
 
-  const filteredPictures =
-    selectedCategory === "all"
-      ? pictures
-      : pictures.filter((pic) => pic.category === selectedCategory);
+  const filteredPictures = pictures
+    .filter((pic) =>
+      selectedCategory === "all" ? true : pic.category === selectedCategory
+    )
+    .filter((pic) =>
+      pic.title.toLowerCase().includes(searchText.toLowerCase())
+    );
 
   const totalPages = Math.ceil(filteredPictures.length / itemsPerPage);
 
@@ -31,61 +41,27 @@ const Pictures = ({ pictures, onAdd, selectedCategory }) => {
       <div className="container py-5">
         <div className="text-center">
           <div className="row">
-            {currentItems.map((picture, index) => (
-              <div key={index} className="col-lg-3 col-md-6 mb-4">
-                <div className="card">
-                  <div
-                    className="bg-image hover-zoom ripple ripple-surface ripple-surface-light"
-                    data-mdb-ripple-color="light"
-                  >
-                    <img
-                      src="https:/picsum.photos/200"
-                      className="w-100"
-                      alt={picture.title}
-                    />
-                    <a href="#!">
-                      <div className="mask">
-                        <div className="d-flex justify-content-start align-items-end h-100">
-                          {picture.isNew && (
-                            <h5>
-                              <span className="badge bg-dark ms-2">NEW</span>
-                            </h5>
-                          )}
-                        </div>
-                      </div>
-                      <div className="hover-overlay">
-                        <div
-                          className="mask"
-                          style={{
-                            backgroundColor: "rgba(251, 251, 251, 0.15)",
-                          }}
-                        ></div>
-                      </div>
-                    </a>
-                  </div>
-                  <div className="card-body">
-                    <p className="text-reset">
-                      <h5 className="card-title mb-2">{picture.title}</h5>
-                    </p>
-                    <p className="text-reset">Category: {picture.category}</p>
-                    <p className="text-reset">
-                      <p>{picture.description}</p>
-                    </p>
-                    <h6 className="mb-3 price">{picture.price}$</h6>
-                    <button
-                      className="btn btn-primary"
-                      onClick={() =>
-                        onAdd(picture.title, picture.id, picture.amount)
-                      }
-                    >
-                      Add to Cart
-                    </button>
-                  </div>
+            {currentItems.length > 0 ? (
+              currentItems.map((picture, index) => (
+                <div key={index} className="col-lg-3 col-md-6 mb-4">
+                  <OnePicture
+                    picture={picture}
+                    onAdd={onAdd}
+                    onPictureClick={onPictureClick}
+                    isFavorite={favorites.some((fav) => fav.id === picture.id)}
+                    toggleFavorite={toggleFavorite}
+                  />
                 </div>
+              ))
+            ) : (
+              <div className="col-12">
+                <h4 className="text-muted">No pictures match your criteria.</h4>
               </div>
-            ))}
+            )}
           </div>
+        </div>
 
+        {currentItems.length > 0 && (
           <nav
             aria-label="Page navigation example"
             className="d-flex justify-content-center mt-3"
@@ -134,9 +110,10 @@ const Pictures = ({ pictures, onAdd, selectedCategory }) => {
               </li>
             </ul>
           </nav>
-        </div>
+        )}
       </div>
     </section>
   );
 };
+
 export default Pictures;

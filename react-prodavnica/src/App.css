@@ -21,6 +21,22 @@
   line-height: 1.6;
 }
 
+#cart-section.h-100 {
+  min-height: 100vh; /* Osigurava da sekcija zauzima visinu prozora */
+}
+
+#cart-section.d-flex {
+  display: flex;
+}
+
+#cart-section.flex-column {
+  flex-direction: column;
+}
+
+#cart-section.justify-content-between {
+  justify-content: space-between;
+}
+
 footer {
   width: 100%;
   position: relative;
