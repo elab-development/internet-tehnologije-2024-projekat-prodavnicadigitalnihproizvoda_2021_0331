@@ -8,6 +8,7 @@ import HomePage from "./components/HomePage";
 import Footer from "./components/Footer";
 import Modal from "./components/Modal";
 import Favorites from "./components/Favorites";
+import Breadcrumbs from "./components/Breadcrumbs";
 import { useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
@@ -157,6 +158,10 @@ function App() {
         onSearch={handleSearch}
       />
 
+      <Breadcrumbs
+        selectedCategory={selectedCategory}
+        resetCategory={resetCategory}
+      />
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<LoginPage />} />
