@@ -49,7 +49,7 @@ function OnePicture({
         <h6 className="mb-3">{picture.price}$</h6>
         <button
           className="btn btn-primary"
-          onClick={() => onAdd(picture.title, picture.id, picture.amount)}
+          onClick={() => onAdd(picture.id, picture.title, picture.price)}
         >
           Add to Cart
         </button>

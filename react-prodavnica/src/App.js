@@ -9,6 +9,7 @@ import Footer from "./components/Footer";
 import Modal from "./components/Modal";
 import Favorites from "./components/Favorites";
 import Breadcrumbs from "./components/Breadcrumbs";
+import useLocalStorage from "./hooks/useLocalStorage";
 import { useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
@@ -20,7 +21,7 @@ function App() {
   const [searchText, setSearchText] = useState("");
   const [selectedPicture, setSelectedPicture] = useState(null);
 
-  const [favorites, setFavorites] = useState([]);
+  const [favorites, setFavorites] = useLocalStorage("favorites", []);
 
   const toggleFavorite = (picture) => {
     setFavorites((prevFavorites) =>
@@ -104,25 +105,26 @@ function App() {
     },
   ]);
 
-  function refreshCart() {
-    let newPictures = pictures.filter((pic) => pic.amount > 0);
-    setCartPictures(newPictures);
-  }
+  function addPicture(id, title, price) {
+    const existingPicture = cartPictures.find((pic) => pic.id === id);
 
-  function addPicture(title, id, amount) {
-    if (amount === 1) {
+    if (existingPicture) {
+      alert("This picture is already in the cart.");
       return;
-    } else {
-      setCartNum(cartNum + 1);
     }
 
-    pictures.forEach((pic) => {
-      if (pic.id === id) {
-        pic.amount++;
-      }
-    });
+    setPictures((prevPictures) =>
+      prevPictures.map((pic) =>
+        pic.id === id ? { ...pic, amount: pic.amount + 1 } : pic
+      )
+    );
 
-    refreshCart();
+    setCartPictures((prevCartPictures) => [
+      ...prevCartPictures,
+      { id, title, price, amount: 1 },
+    ]);
+
+    setCartNum((prevNum) => prevNum + 1);
   }
 
   function removePicture(id) {
@@ -130,16 +132,10 @@ function App() {
       return;
     }
 
-    setCartNum(cartNum - 1);
-    setCartPictures(cartPictures.filter((pic) => pic.id !== id));
+    setCartNum(cartPictures.length - 1);
 
-    setPictures(
-      pictures.map((pic) => {
-        if (pic.id === id) {
-          pic.amount = 0;
-        }
-        return pic;
-      })
+    setCartPictures((prevCartPictures) =>
+      prevCartPictures.filter((pic) => pic.id !== id)
     );
   }
 

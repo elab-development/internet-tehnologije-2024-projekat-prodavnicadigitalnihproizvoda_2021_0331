@@ -22,7 +22,6 @@ const Cart = ({
   };
 
   const totalPrice = cartItems.reduce((total, pic) => total + pic.price, 0);
-
   const handleBuyNow = (e) => {
     e.preventDefault();
 

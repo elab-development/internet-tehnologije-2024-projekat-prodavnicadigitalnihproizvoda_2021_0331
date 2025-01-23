@@ -13,8 +13,21 @@ const Modal = ({ picture, onClose }) => {
     >
       <div className="modal-dialog" style={{ maxWidth: "600px", width: "90%" }}>
         <div className="modal-content">
-          <div className="modal-header">
-            <h5 className="modal-title">{picture.title}</h5>
+          <div
+            className="modal-header"
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              position: "relative",
+            }}
+          >
+            <h5
+              className="modal-title"
+              style={{ flexGrow: 1, textAlign: "center", fontWeight: "bold" }}
+            >
+              {picture.title}
+            </h5>
             <button className="btn-close" onClick={onClose}></button>
           </div>
           <div className="modal-body text-center">
@@ -32,7 +45,11 @@ const Modal = ({ picture, onClose }) => {
             <p className="fw-bold">Price: {picture.price} EUR</p>
           </div>
           <div className="modal-footer">
-            <button className="btn btn-secondary" onClick={onClose}>
+            <button
+              className="btn btn-secondary"
+              onClick={onClose}
+              style={{ backgroundColor: "blue" }}
+            >
               Close
             </button>
           </div>
