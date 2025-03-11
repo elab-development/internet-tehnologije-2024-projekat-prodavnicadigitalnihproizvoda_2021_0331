@@ -1,6 +1,22 @@
 import React from "react";
+// import React, { useEffect, useState } from "react";
 
 const HomePage = () => {
+  // const [quote, setQuote] = useState("");
+
+  // useEffect(() => {
+  //   fetch("https://zenquotes.io/api/random")
+  //     .then((response) => response.json())
+  //     .then((data) => {
+  //       if (data && data[0]) {
+  //         setQuote(data[0]);
+  //       }
+  //     })
+  //     .catch((error) =>
+  //       console.error("Greška prilikom preuzimanja poruke:", error)
+  //     );
+  // }, []);
+
   return (
     <div id="main">
       <div className="getstarted">
@@ -14,6 +30,14 @@ const HomePage = () => {
           - your next masterpiece is just a click away!
         </p>
         <br />
+        {/* {quote && (
+          <blockquote className="quote">
+            <p>"{quote.q}"</p>
+            <footer>- {quote.a}</footer>
+          </blockquote>
+        )} */}
+        <br />
+
         <a href="/gallery" className="btn btn-dark btn-lg">
           Get Started
         </a>

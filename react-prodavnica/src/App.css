@@ -230,3 +230,11 @@ footer .col-lg-3 {
   input.md-toast-close-button[type="number"]:focus {
   color: #212529;
 }
+
+/* .quote {
+  font-style: italic;
+  color: #444;
+  margin-top: 20px;
+  padding: 10px;
+  border-left: 4px solid #555;
+} */

@@ -12,8 +12,10 @@ import Breadcrumbs from "./components/Breadcrumbs";
 import useLocalStorage from "./hooks/useLocalStorage";
 import { useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import axios from "axios";
 
 function App() {
+  const [token, setToken] = useState();
   const categories = ["Nature", "Portrait", "Abstract"];
   const [cartNum, setCartNum] = useState(0);
   const [cartPictures, setCartPictures] = useState([]);
@@ -52,58 +54,59 @@ function App() {
     setSelectedPicture(null);
   };
 
-  const [pictures, setPictures] = useState([
-    {
-      id: 1,
-      title: "Picture 1",
-      description: "Description 1",
-      category: "Nature",
-      price: 2500,
-      amount: 0,
-    },
-    {
-      id: 2,
-      title: "LALALALAL",
-      description: "Description 2",
-      category: "Nature",
-      price: 1200,
-      amount: 0,
-    },
-    {
-      id: 3,
-      title: "Picture 3",
-      description: "Description 3",
-      category: "Nature",
-      price: 1000,
-      amount: 0,
-    },
-    {
-      id: 4,
-      title: "Picture 31",
-      description: "Description 4",
-      category: "Nature",
-      price: 1250,
-      amount: 0,
-    },
-
-    {
-      id: 5,
-      title: "Picture 5",
-      description: "Description 5",
-      category: "Nature",
-      price: 3000,
-      amount: 0,
-    },
-
-    {
-      id: 6,
-      title: "Picture 6",
-      description: "Description 6",
-      category: "Abstract",
-      price: 1200,
-      amount: 0,
-    },
-  ]);
+  // const [pictures, setPictures] = useState([
+  //   axios.get("api/pictures").then((res) => {
+  //     console.log(res.data);
+  //   }),
+  //   // {
+  //   //   id: 1,
+  //   //   title: "Picture 1",
+  //   //   description: "Description 1",
+  //   //   category: "Nature",
+  //   //   price: 2500,
+  //   //   amount: 0,
+  //   // },
+  //   // {
+  //   //   id: 2,
+  //   //   title: "LALALALAL",
+  //   //   description: "Description 2",
+  //   //   category: "Nature",
+  //   //   price: 1200,
+  //   //   amount: 0,
+  //   // },
+  //   // {
+  //   //   id: 3,
+  //   //   title: "Picture 3",
+  //   //   description: "Description 3",
+  //   //   category: "Nature",
+  //   //   price: 1000,
+  //   //   amount: 0,
+  //   // },
+  //   // {
+  //   //   id: 4,
+  //   //   title: "Picture 31",
+  //   //   description: "Description 4",
+  //   //   category: "Nature",
+  //   //   price: 1250,
+  //   //   amount: 0,
+  //   // },
+  //   // {
+  //   //   id: 5,
+  //   //   title: "Picture 5",
+  //   //   description: "Description 5",
+  //   //   category: "Nature",
+  //   //   price: 3000,
+  //   //   amount: 0,
+  //   // },
+  //   // {
+  //   //   id: 6,
+  //   //   title: "Picture 6",
+  //   //   description: "Description 6",
+  //   //   category: "Abstract",
+  //   //   price: 1200,
+  //   //   amount: 0,
+  //   // },
+  // ]);
 
   function addPicture(id, title, price) {
     const existingPicture = cartPictures.find((pic) => pic.id === id);
@@ -113,11 +116,11 @@ function App() {
       return;
     }
 
-    setPictures((prevPictures) =>
-      prevPictures.map((pic) =>
-        pic.id === id ? { ...pic, amount: pic.amount + 1 } : pic
-      )
-    );
+    // setPictures((prevPictures) =>
+    //   prevPictures.map((pic) =>
+    //     pic.id === id ? { ...pic, amount: pic.amount + 1 } : pic
+    //   )
+    // );
 
     setCartPictures((prevCartPictures) => [
       ...prevCartPictures,
@@ -144,6 +147,10 @@ function App() {
     setCartPictures([]);
   }
 
+  function addToken(auth_token) {
+    setToken(auth_token);
+  }
+
   return (
     <BrowserRouter className="App">
       <NavBar
@@ -152,6 +159,7 @@ function App() {
         onFilter={handleFilter}
         selectedCategory={selectedCategory}
         onSearch={handleSearch}
+        token={token}
       />
 
       <Breadcrumbs
@@ -160,13 +168,12 @@ function App() {
       />
       <Routes>
         <Route path="/" element={<HomePage />} />
-        <Route path="/login" element={<LoginPage />} />
+        <Route path="/login" element={<LoginPage addToken={addToken} />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route
           path="/gallery"
           element={
             <Pictures
-              pictures={pictures}
               onAdd={addPicture}
               selectedCategory={selectedCategory}
               searchText={searchText}

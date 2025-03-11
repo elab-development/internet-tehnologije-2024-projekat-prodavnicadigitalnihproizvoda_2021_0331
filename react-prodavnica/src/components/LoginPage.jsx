@@ -1,8 +1,9 @@
 import React from "react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
-const LoginPage = () => {
+const LoginPage = ({ addToken }) => {
   const [userData, setUserData] = useState({
     email: "",
     password: "",
@@ -15,8 +16,21 @@ const LoginPage = () => {
     setUserData(newUserData);
   }
 
-  function handleLogin() {
-    navigate("/gallery");
+  function handleLogin(e) {
+    e.preventDefault();
+    axios
+      .post("api/login", userData)
+      .then((res) => {
+        console.log(res.data);
+        if (res.data.success === true) {
+          window.sessionStorage.setItem("auth_token", res.data.access_token);
+          addToken(res.data.access_token);
+          navigate("/gallery");
+        }
+      })
+      .catch((e) => {
+        console.log(e);
+      });
   }
 
   return (
@@ -38,6 +52,7 @@ const LoginPage = () => {
                     type="email"
                     id="form2Example18"
                     className="form-control form-control-lg"
+                    name="email"
                     onInput={handleInput}
                   />
                   <label className="form-label" htmlFor="form2Example18">
@@ -50,7 +65,8 @@ const LoginPage = () => {
                     type="password"
                     id="form2Example28"
                     className="form-control form-control-lg"
-                    onInput={handleInput}
+                    name="password"
+                    onInput={(e) => handleInput(e)}
                   />
                   <label className="form-label" htmlFor="form2Example28">
                     Password

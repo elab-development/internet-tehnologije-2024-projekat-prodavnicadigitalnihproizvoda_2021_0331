@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import OnePicture from "./OnePicture";
+import axios from "axios";
 
 const Pictures = ({
-  pictures,
   onAdd,
   selectedCategory,
   searchText,
@@ -10,10 +10,24 @@ const Pictures = ({
   favorites,
   toggleFavorite,
 }) => {
+  const [pictures, setPictures] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get("/api/pictures")
+      .then((res) => {
+        console.log("Slike učitane:", res.data);
+        setPictures(res.data.pictures || []);
+      })
+      .catch((error) => {
+        console.error("Greška pri dobijanju slika:", error);
+      });
+  }, []);
+
   const itemsPerPage = 4;
   const [currentPage, setCurrentPage] = useState(1);
 
-  const filteredPictures = pictures
+  const filteredPictures = (pictures || [])
     .filter((pic) =>
       selectedCategory === "all" ? true : pic.category === selectedCategory
     )

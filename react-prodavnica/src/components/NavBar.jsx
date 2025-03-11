@@ -1,8 +1,37 @@
 import React from "react";
 import { FaShoppingCart } from "react-icons/fa";
 import { Link, useLocation } from "react-router-dom";
+import axios from "axios";
 
-function NavBar({ cartNum, categories, onFilter, selectedCategory, onSearch }) {
+function NavBar({
+  cartNum,
+  categories,
+  onFilter,
+  selectedCategory,
+  onSearch,
+  token,
+}) {
+  function handleLogout() {
+    let config = {
+      method: "post",
+      maxBodyLength: Infinity,
+      url: "api/logout",
+      headers: {
+        Authorization: "Bearer " + window.sessionStorage.getItem("auth_token"),
+      },
+    };
+
+    axios
+      .request(config)
+      .then((response) => {
+        console.log(JSON.stringify(response.data));
+        window.sessionStorage.setItem("auth_token", null);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
   const location = useLocation();
   const handleCategoryChange = (e) => {
     onFilter(e.target.value);
@@ -93,9 +122,16 @@ function NavBar({ cartNum, categories, onFilter, selectedCategory, onSearch }) {
               </form>
             </div>
           )}
-          <a className=" nav-item nav-link" href="/login">
-            Login
-          </a>
+
+          {token == null ? (
+            <a className=" nav-item nav-link" href="/login">
+              Login
+            </a>
+          ) : (
+            <a className=" nav-item nav-link" href="/" onClick={handleLogout}>
+              Logout
+            </a>
+          )}
         </div>
       </div>
     </nav>
