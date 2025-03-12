@@ -32,7 +32,11 @@ const Modal = ({ picture, onClose }) => {
           </div>
           <div className="modal-body text-center">
             <img
-              src="https:/picsum.photos/370"
+              src={
+                picture.low_res_path
+                  ? picture.low_res_path
+                  : "https://via.placeholder.com/200"
+              }
               alt={picture.title}
               className="img-fluid"
               style={{

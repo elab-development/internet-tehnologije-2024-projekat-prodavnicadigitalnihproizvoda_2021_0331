@@ -1,21 +1,31 @@
-import React from "react";
-// import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
+import axios from "axios";
 
 const HomePage = () => {
-  // const [quote, setQuote] = useState("");
+  const [quote, setQuote] = useState("");
+  const [author, setAuthor] = useState("");
+  const hasFetched = useRef(false);
 
-  // useEffect(() => {
-  //   fetch("https://zenquotes.io/api/random")
-  //     .then((response) => response.json())
-  //     .then((data) => {
-  //       if (data && data[0]) {
-  //         setQuote(data[0]);
-  //       }
-  //     })
-  //     .catch((error) =>
-  //       console.error("Greška prilikom preuzimanja poruke:", error)
-  //     );
-  // }, []);
+  useEffect(() => {
+    if (!hasFetched.current) {
+      fetchRandomQuote();
+      hasFetched.current = true;
+    }
+  }, []);
+
+  const fetchRandomQuote = async () => {
+    try {
+      const response = await axios.get(
+        "http://127.0.0.1:8000/api/random-quote"
+      );
+      setQuote(response.data.quote);
+      setAuthor(response.data.author);
+    } catch (error) {
+      console.error("Error fetching quote:", error);
+      setQuote("Failed to load quote.");
+      setAuthor("");
+    }
+  };
 
   return (
     <div id="main">
@@ -30,17 +40,18 @@ const HomePage = () => {
           - your next masterpiece is just a click away!
         </p>
         <br />
-        {/* {quote && (
-          <blockquote className="quote">
-            <p>"{quote.q}"</p>
-            <footer>- {quote.a}</footer>
-          </blockquote>
-        )} */}
-        <br />
-
         <a href="/gallery" className="btn btn-dark btn-lg">
           Get Started
         </a>
+        <br />
+        <br />
+
+        <div className="quote-section">
+          <p>"{quote}"</p>
+          <p>
+            <strong>- {author}</strong>
+          </p>
+        </div>
       </div>
     </div>
   );

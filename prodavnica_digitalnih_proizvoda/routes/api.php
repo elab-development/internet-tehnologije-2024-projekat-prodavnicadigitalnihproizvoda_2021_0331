@@ -25,6 +25,36 @@ use App\Http\Resources\PictureResource;
 |
 */
 
+Route::get('/random-quote', function () {
+    try {
+        Log::info('Fetching quote from ZenQuotes API...');
+
+        $response = Http::get('https://zenquotes.io/api/random');
+
+        if ($response->failed()) {
+            Log::error('ZenQuotes API failed', ['status' => $response->status(), 'body' => $response->body()]);
+            return response()->json(['error' => 'Failed to fetch quote'], 500);
+        }
+
+        $quoteData = $response->json()[0] ?? null;
+
+        if (!$quoteData || !isset($quoteData['q']) || !isset($quoteData['a'])) {
+            Log::error('Invalid response from ZenQuotes API', ['response' => $response->json()]);
+            return response()->json(['error' => 'Invalid response'], 500);
+        }
+
+        Log::info('Quote fetched successfully', ['quote' => $quoteData['q'], 'author' => $quoteData['a']]);
+
+        return response()->json([
+            'quote' => $quoteData['q'],
+            'author' => $quoteData['a']
+        ]);
+    } catch (\Exception $e) {
+        Log::error('Exception occurred: ' . $e->getMessage());
+        return response()->json(['error' => 'Internal Server Error'], 500);
+    }
+});
+
  Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
  });

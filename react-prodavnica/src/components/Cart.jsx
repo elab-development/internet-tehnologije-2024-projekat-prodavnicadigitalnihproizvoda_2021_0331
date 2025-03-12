@@ -10,6 +10,7 @@ const Cart = ({
   resetCategory,
   resetSearch,
 }) => {
+  console.log("Podaci u Cart komponenti:", pictures);
   const [cartItems, setCartItems] = useState(pictures);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -21,7 +22,10 @@ const Cart = ({
     setCartItems(cartItems.filter((item) => item.id !== id));
   };
 
-  const totalPrice = cartItems.reduce((total, pic) => total + pic.price, 0);
+  const totalPrice = cartItems
+    .reduce((total, pic) => total + parseFloat(pic.price), 0)
+    .toFixed(2);
+
   const handleBuyNow = (e) => {
     e.preventDefault();
 
@@ -83,10 +87,22 @@ const Cart = ({
                         key={index}
                       >
                         <div className="flex-shrink-0">
+                          {console.log(
+                            "Putanja slike u korpi:",
+                            picture.low_res_path
+                          )}
                           <img
-                            src="https:/picsum.photos/200"
+                            src={
+                              picture.low_res_path?.startsWith("http")
+                                ? picture.low_res_path
+                                : `http://localhost:8000/${picture.low_res_path}`
+                            }
                             className="img-fluid"
-                            style={{ width: "150px" }}
+                            style={{
+                              width: "90px",
+                              height: "90px",
+                              objectFit: "cover",
+                            }}
                             alt={picture.name}
                           />
                         </div>
@@ -106,7 +122,7 @@ const Cart = ({
                           <h5 className="text-primary">{picture.title}</h5>
                           <div className="d-flex align-items-center">
                             <p className="fw-bold mb-0 me-5 pe-3">
-                              {picture.price}$
+                              {picture.price} EUR
                             </p>
                           </div>
                         </div>
@@ -129,7 +145,7 @@ const Cart = ({
                         Total:
                       </h5>
                       <h5 className="fw-bold mb-0" style={{ color: "white" }}>
-                        {totalPrice}$
+                        {totalPrice} EUR
                       </h5>
                     </div>
                   </div>

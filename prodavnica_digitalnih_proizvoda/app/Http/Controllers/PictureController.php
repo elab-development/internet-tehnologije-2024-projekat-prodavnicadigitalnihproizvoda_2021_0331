@@ -13,7 +13,20 @@ class PictureController extends Controller
 {
     public function index(){
        
-        return response()->json(Picture::all(), 200);
+        $pictures = Picture::with('category')->get()->map(function ($picture) {
+            return [
+                'id' => $picture->id,
+                'title' => $picture->title,
+                'description' => $picture->description,
+                'category_id' => $picture->category_id,
+                'category_name' => $picture->category ? $picture->category->name : "Unknown",
+                'price' => $picture->price,
+                'low_res_path' => asset($picture->low_res_path),
+                'high_res_path' => asset($picture->high_res_path),
+            ];
+        });
+    
+        return response()->json(['pictures' => $pictures], 200);
     }
 
     public function store(Request $request)

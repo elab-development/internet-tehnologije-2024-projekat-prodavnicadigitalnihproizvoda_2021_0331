@@ -10,7 +10,7 @@ import Modal from "./components/Modal";
 import Favorites from "./components/Favorites";
 import Breadcrumbs from "./components/Breadcrumbs";
 import useLocalStorage from "./hooks/useLocalStorage";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import axios from "axios";
 
@@ -33,6 +33,20 @@ function App() {
     );
   };
 
+  const [pictures, setPictures] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get("/api/pictures")
+      .then((res) => {
+        console.log("Slike učitane:", res.data);
+        setPictures(res.data.pictures || []);
+      })
+      .catch((error) => {
+        console.error("Greška pri dobijanju slika:", error);
+      });
+  }, []);
+
   const handleFilter = (category) => {
     setSelectedCategory(category);
   };
@@ -54,61 +68,7 @@ function App() {
     setSelectedPicture(null);
   };
 
-  // const [pictures, setPictures] = useState([
-  //   axios.get("api/pictures").then((res) => {
-  //     console.log(res.data);
-  //   }),
-  //   // {
-  //   //   id: 1,
-  //   //   title: "Picture 1",
-  //   //   description: "Description 1",
-  //   //   category: "Nature",
-  //   //   price: 2500,
-  //   //   amount: 0,
-  //   // },
-  //   // {
-  //   //   id: 2,
-  //   //   title: "LALALALAL",
-  //   //   description: "Description 2",
-  //   //   category: "Nature",
-  //   //   price: 1200,
-  //   //   amount: 0,
-  //   // },
-  //   // {
-  //   //   id: 3,
-  //   //   title: "Picture 3",
-  //   //   description: "Description 3",
-  //   //   category: "Nature",
-  //   //   price: 1000,
-  //   //   amount: 0,
-  //   // },
-  //   // {
-  //   //   id: 4,
-  //   //   title: "Picture 31",
-  //   //   description: "Description 4",
-  //   //   category: "Nature",
-  //   //   price: 1250,
-  //   //   amount: 0,
-  //   // },
-  //   // {
-  //   //   id: 5,
-  //   //   title: "Picture 5",
-  //   //   description: "Description 5",
-  //   //   category: "Nature",
-  //   //   price: 3000,
-  //   //   amount: 0,
-  //   // },
-  //   // {
-  //   //   id: 6,
-  //   //   title: "Picture 6",
-  //   //   description: "Description 6",
-  //   //   category: "Abstract",
-  //   //   price: 1200,
-  //   //   amount: 0,
-  //   // },
-  // ]);
-
-  function addPicture(id, title, price) {
+  function addPicture(id, title, price, low_res_path, high_res_path) {
     const existingPicture = cartPictures.find((pic) => pic.id === id);
 
     if (existingPicture) {
@@ -116,15 +76,9 @@ function App() {
       return;
     }
 
-    // setPictures((prevPictures) =>
-    //   prevPictures.map((pic) =>
-    //     pic.id === id ? { ...pic, amount: pic.amount + 1 } : pic
-    //   )
-    // );
-
     setCartPictures((prevCartPictures) => [
       ...prevCartPictures,
-      { id, title, price, amount: 1 },
+      { id, title, price, low_res_path, high_res_path, amount: 1 },
     ]);
 
     setCartNum((prevNum) => prevNum + 1);
@@ -174,6 +128,7 @@ function App() {
           path="/gallery"
           element={
             <Pictures
+              pictures={pictures}
               onAdd={addPicture}
               selectedCategory={selectedCategory}
               searchText={searchText}

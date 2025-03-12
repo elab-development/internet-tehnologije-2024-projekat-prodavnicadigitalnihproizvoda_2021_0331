@@ -83,9 +83,9 @@ class CartController extends Controller
 }
 
     
-
-    public function downloadHighRes($id)
+public function downloadHighRes($id)
 {
+    // Provera da li je korisnik autentifikovan i da li ima pravo pristupa
     $cart = Cart::where('user_id', auth()->id())
         ->where('picture_id', $id)
         ->first();
@@ -94,11 +94,37 @@ class CartController extends Controller
         return response()->json(['error' => 'Unauthorized'], 403);
     }
 
+    // Pronalaženje slike
     $picture = Picture::find($id);
     if (!$picture) {
         return response()->json(['error' => 'Picture not found'], 404);
     }
 
+    // Provera da li fajl postoji
+    if (!file_exists(public_path($picture->high_res_path))) {
+        return response()->json(['error' => 'File not found'], 404);
+    }
+
+    // Preuzimanje fajla
     return response()->download(public_path($picture->high_res_path));
 }
+
+
+//     public function downloadHighRes($id)
+// {
+//     $cart = Cart::where('user_id', auth()->id())
+//         ->where('picture_id', $id)
+//         ->first();
+
+//     if (!$cart) {
+//         return response()->json(['error' => 'Unauthorized'], 403);
+//     }
+
+//     $picture = Picture::find($id);
+//     if (!$picture) {
+//         return response()->json(['error' => 'Picture not found'], 404);
+//     }
+
+//     return response()->download(public_path($picture->high_res_path));
+// }
 }

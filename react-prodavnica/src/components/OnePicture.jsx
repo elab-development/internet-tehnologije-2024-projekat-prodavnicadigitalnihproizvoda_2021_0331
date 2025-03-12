@@ -17,7 +17,11 @@ function OnePicture({
         style={{ cursor: "pointer" }}
       >
         <img
-          src="https:/picsum.photos/200"
+          src={
+            picture.low_res_path
+              ? picture.low_res_path
+              : "https://via.placeholder.com/200"
+          }
           className="w-100"
           alt={picture.title}
         />
@@ -44,12 +48,22 @@ function OnePicture({
             {isFavorite ? <FaHeart /> : <FaRegHeart />}
           </button>
         </div>
-        <p>Category: {picture.category}</p>
+        <p>
+          <strong>Category:</strong> {picture.category_name || "Unknown"}
+        </p>
 
-        <h6 className="mb-3">{picture.price}$</h6>
+        <h6 className="mb-3">{picture.price} EUR</h6>
         <button
           className="btn btn-primary"
-          onClick={() => onAdd(picture.id, picture.title, picture.price)}
+          onClick={() =>
+            onAdd(
+              picture.id,
+              picture.title,
+              picture.price,
+              picture.low_res_path,
+              picture.high_res_path
+            )
+          }
         >
           Add to Cart
         </button>
