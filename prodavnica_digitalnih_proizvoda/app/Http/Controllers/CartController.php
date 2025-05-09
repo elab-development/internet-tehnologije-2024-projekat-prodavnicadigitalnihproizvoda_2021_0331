@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Cart;
 use App\Models\Picture;
+use Illuminate\Support\Facades\Response;
+
 
 class CartController extends Controller
 {
@@ -82,49 +84,30 @@ class CartController extends Controller
     }
 }
 
-    
-public function downloadHighRes($id)
+public function downloadHighRes($cartId)
 {
-    // Provera da li je korisnik autentifikovan i da li ima pravo pristupa
-    $cart = Cart::where('user_id', auth()->id())
-        ->where('picture_id', $id)
+    $cart = Cart::with('picture')
+        ->where('id', $cartId)
+        ->where('user_id', auth()->id())
         ->first();
 
-    if (!$cart) {
-        return response()->json(['error' => 'Unauthorized'], 403);
+    if (!$cart || !$cart->picture) {
+        return response()->json(['error' => 'Unauthorized or picture not found'], 403);
     }
 
-    // Pronalaženje slike
-    $picture = Picture::find($id);
-    if (!$picture) {
-        return response()->json(['error' => 'Picture not found'], 404);
-    }
+    $path = public_path($cart->picture->high_res_path);
 
-    // Provera da li fajl postoji
-    if (!file_exists(public_path($picture->high_res_path))) {
+    if (!file_exists($path)) {
         return response()->json(['error' => 'File not found'], 404);
     }
 
-    // Preuzimanje fajla
-    return response()->download(public_path($picture->high_res_path));
+    return Response::make(file_get_contents($path), 200, [
+        'Content-Type' => 'application/octet-stream',
+        'Content-Disposition' => 'attachment; filename="' . basename($path) . '"',
+        'Access-Control-Allow-Origin' => '*',
+        'Access-Control-Allow-Methods' => 'GET, OPTIONS',
+        'Access-Control-Allow-Headers' => 'Origin, Content-Type, Authorization',
+    ]);
 }
 
-
-//     public function downloadHighRes($id)
-// {
-//     $cart = Cart::where('user_id', auth()->id())
-//         ->where('picture_id', $id)
-//         ->first();
-
-//     if (!$cart) {
-//         return response()->json(['error' => 'Unauthorized'], 403);
-//     }
-
-//     $picture = Picture::find($id);
-//     if (!$picture) {
-//         return response()->json(['error' => 'Picture not found'], 404);
-//     }
-
-//     return response()->download(public_path($picture->high_res_path));
-// }
 }

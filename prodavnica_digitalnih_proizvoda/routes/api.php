@@ -10,6 +10,8 @@ use App\Http\Controllers\API\AuthController;
 use App\Models\Picture;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Resources\PictureResource;
+use Laravel\Sanctum\PersonalAccessToken;
+
 
 
 
@@ -108,4 +110,6 @@ Route::group(['middleware' => ['auth:sanctum', 'role:admin']], function () {
 // ------------------------------------
 // Paginate ruta
 Route::get('/paginate', [PictureController::class, 'paginate_pictures']);
+
+
 

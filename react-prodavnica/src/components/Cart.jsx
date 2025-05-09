@@ -46,15 +46,63 @@ const Cart = ({
     setIsModalOpen(true);
   };
 
-  const confirmPurchase = () => {
+  const confirmPurchase = async () => {
     alert("Purchase confirmed!");
     setIsModalOpen(false);
-    setCartItems([]);
-    updateCartNum(0);
-    pictures.forEach((pic) => (pic.amount = 0));
-    resetCategory();
-    resetSearch();
-    navigate("/gallery");
+
+    const token = sessionStorage.getItem("auth_token");
+
+    try {
+      for (const pic of cartItems) {
+        const responseCart = await fetch("http://127.0.0.1:8000/api/cart", {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ picture_id: pic.id }),
+        });
+
+        const result = await responseCart.json();
+        const cartId = result.cart?.id;
+
+        if (!cartId) {
+          console.error("Cart ID not found for picture:", pic.title);
+          continue;
+        }
+
+        const downloadUrl = `http://127.0.0.1:8000/api/cart/${cartId}/download`;
+        const responseDownload = await fetch(downloadUrl, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (!responseDownload.ok) {
+          console.error("Download failed for", pic.title);
+          continue;
+        }
+
+        const blob = await responseDownload.blob();
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = `${pic.title}.png`;
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        window.URL.revokeObjectURL(url);
+      }
+
+      setCartItems([]);
+      updateCartNum(0);
+      pictures.forEach((pic) => (pic.amount = 0));
+      resetCategory();
+      resetSearch();
+      navigate("/gallery");
+    } catch (error) {
+      console.error("Purchase process failed:", error);
+    }
   };
 
   const cancelPurchase = () => {
