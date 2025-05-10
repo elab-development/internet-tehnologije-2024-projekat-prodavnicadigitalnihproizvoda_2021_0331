@@ -2,6 +2,7 @@ import React from "react";
 import { FaShoppingCart } from "react-icons/fa";
 import { Link, useLocation } from "react-router-dom";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 function NavBar({
   cartNum,
@@ -10,25 +11,30 @@ function NavBar({
   selectedCategory,
   onSearch,
   token,
+  onLogout,
 }) {
-  function handleLogout() {
-    let config = {
-      method: "post",
-      maxBodyLength: Infinity,
-      url: "api/logout",
-      headers: {
-        Authorization: "Bearer " + window.sessionStorage.getItem("auth_token"),
-      },
-    };
+  const navigate = useNavigate();
 
+  function handleLogout() {
     axios
-      .request(config)
+      .post(
+        "api/logout",
+        {},
+        {
+          headers: {
+            Authorization:
+              "Bearer " + window.sessionStorage.getItem("auth_token"),
+          },
+        }
+      )
       .then((response) => {
-        console.log(JSON.stringify(response.data));
-        window.sessionStorage.setItem("auth_token", null);
+        console.log("Logout successful:", response.data);
       })
       .catch((error) => {
-        console.log(error);
+        console.log("Logout error:", error);
+      })
+      .finally(() => {
+        onLogout(navigate); // << poziva funkciju iz App.js
       });
   }
 
@@ -128,7 +134,14 @@ function NavBar({
               Login
             </a>
           ) : (
-            <a className=" nav-item nav-link" href="/" onClick={handleLogout}>
+            <a
+              className=" nav-item nav-link text-danger"
+              href="/"
+              onClick={(e) => {
+                e.preventDefault();
+                handleLogout();
+              }}
+            >
               Logout
             </a>
           )}

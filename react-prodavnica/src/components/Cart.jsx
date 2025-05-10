@@ -47,10 +47,18 @@ const Cart = ({
   };
 
   const confirmPurchase = async () => {
+    const token = sessionStorage.getItem("auth_token");
+
+    if (!token) {
+      alert("You must be logged in to confirm purchase.");
+      setIsModalOpen(false);
+      return;
+    }
+
     alert("Purchase confirmed!");
     setIsModalOpen(false);
 
-    const token = sessionStorage.getItem("auth_token");
+    //const token = sessionStorage.getItem("auth_token");
 
     try {
       for (const pic of cartItems) {

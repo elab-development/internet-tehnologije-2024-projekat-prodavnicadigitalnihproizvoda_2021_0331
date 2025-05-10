@@ -24,9 +24,10 @@ const LoginPage = ({ addToken }) => {
         console.log("Login response:", res.data);
 
         if (res.data.success === true) {
-          window.sessionStorage.setItem("auth_token", res.data.access_token);
-          console.log("Token saved:", res.data.access_token);
-          addToken(res.data.access_token);
+          const token = res.data.access_token;
+          window.sessionStorage.setItem("auth_token", token);
+          addToken(token);
+
           navigate("/gallery");
         }
       })

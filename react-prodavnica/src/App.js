@@ -15,7 +15,11 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import axios from "axios";
 
 function App() {
-  const [token, setToken] = useState();
+  //const [token, setToken] = useState();
+  const [token, setToken] = useState(() =>
+    sessionStorage.getItem("auth_token")
+  );
+
   const categories = ["Nature", "Portrait", "Abstract"];
   const [cartNum, setCartNum] = useState(0);
   const [cartPictures, setCartPictures] = useState([]);
@@ -68,9 +72,14 @@ function App() {
     setSelectedPicture(null);
   };
 
-  function addPicture(id, title, price, low_res_path, high_res_path) {
-    const existingPicture = cartPictures.find((pic) => pic.id === id);
+  function addPicture(id, title, price, low_res_path, high_res_path, navigate) {
+    if (!token || token === "null") {
+      alert("You must be logged in to add pictures to your cart.");
+      navigate("/login");
+      return;
+    }
 
+    const existingPicture = cartPictures.find((pic) => pic.id === id);
     if (existingPicture) {
       alert("This picture is already in the cart.");
       return;
@@ -105,6 +114,20 @@ function App() {
     setToken(auth_token);
   }
 
+  function handleLogout(navigate) {
+    sessionStorage.removeItem("auth_token");
+    setToken(null);
+    setCartNum(0);
+    setCartPictures([]);
+    setFavorites([]);
+    navigate("/");
+  }
+
+  useEffect(() => {
+    console.log("App token:", token);
+    console.log("SessionStorage token:", sessionStorage.getItem("auth_token"));
+  }, [token]);
+
   return (
     <BrowserRouter className="App">
       <NavBar
@@ -114,6 +137,7 @@ function App() {
         selectedCategory={selectedCategory}
         onSearch={handleSearch}
         token={token}
+        onLogout={handleLogout}
       />
 
       <Breadcrumbs
@@ -135,6 +159,7 @@ function App() {
               onPictureClick={setSelectedPicture}
               favorites={favorites}
               toggleFavorite={toggleFavorite}
+              token={token}
             />
           }
         />

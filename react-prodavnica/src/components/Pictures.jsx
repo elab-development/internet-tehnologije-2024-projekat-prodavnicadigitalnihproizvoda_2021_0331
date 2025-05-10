@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import OnePicture from "./OnePicture";
+import { useNavigate } from "react-router-dom";
 
 const Pictures = ({
   pictures,
@@ -9,9 +10,21 @@ const Pictures = ({
   onPictureClick,
   favorites,
   toggleFavorite,
+  token,
 }) => {
   const itemsPerPage = 4;
   const [currentPage, setCurrentPage] = useState(1);
+  const navigate = useNavigate();
+
+  const handleToggleFavorite = (picture) => {
+    if (!token || token === "null") {
+      alert("You must be logged in to add pictures to favorites.");
+      navigate("/login");
+      return;
+    }
+
+    toggleFavorite(picture);
+  };
 
   const filteredPictures = (pictures || [])
     .filter((pic) =>
@@ -46,10 +59,19 @@ const Pictures = ({
                 <div key={index} className="col-lg-3 col-md-6 mb-4">
                   <OnePicture
                     picture={picture}
-                    onAdd={onAdd}
+                    onAdd={(id, title, price, low_res_path, high_res_path) =>
+                      onAdd(
+                        id,
+                        title,
+                        price,
+                        low_res_path,
+                        high_res_path,
+                        navigate
+                      )
+                    }
                     onPictureClick={onPictureClick}
                     isFavorite={favorites.some((fav) => fav.id === picture.id)}
-                    toggleFavorite={toggleFavorite}
+                    toggleFavorite={handleToggleFavorite}
                   />
                 </div>
               ))
