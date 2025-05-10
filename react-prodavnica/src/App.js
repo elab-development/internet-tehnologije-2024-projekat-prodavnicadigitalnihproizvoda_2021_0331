@@ -11,8 +11,15 @@ import Favorites from "./components/Favorites";
 import Breadcrumbs from "./components/Breadcrumbs";
 import useLocalStorage from "./hooks/useLocalStorage";
 import { useState, useEffect } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import axios from "axios";
+import AdminDashboard from "./pages/admin/AdminDashboard";
+import AdminAddPicture from "./pages/admin/AdminAddPicture";
+import AdminManagePictures from "./pages/admin/AdminManagePictures";
+import AdminEditPicture from "./pages/admin/AdminEditPicture";
+import AdminAddCategory from "./pages/admin/AdminAddCategory";
+import AdminLayout from "./pages/admin/AdminLayout";
+import AdminPreviewGallery from "./pages/admin/AdminPreviewGallery";
 
 function App() {
   //const [token, setToken] = useState();
@@ -128,71 +135,93 @@ function App() {
     console.log("SessionStorage token:", sessionStorage.getItem("auth_token"));
   }, [token]);
 
+  function AppContent() {
+    const location = useLocation();
+    const isAdmin = location.pathname.startsWith("/admin");
+
+    return (
+      <>
+        {!isAdmin && (
+          <NavBar
+            cartNum={cartNum}
+            categories={categories}
+            onFilter={handleFilter}
+            selectedCategory={selectedCategory}
+            onSearch={handleSearch}
+            token={token}
+            onLogout={handleLogout}
+          />
+        )}
+
+        {!isAdmin && (
+          <Breadcrumbs
+            selectedCategory={selectedCategory}
+            resetCategory={resetCategory}
+          />
+        )}
+
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/login" element={<LoginPage addToken={addToken} />} />
+          <Route path="/register" element={<RegisterPage />} />
+          <Route
+            path="/gallery"
+            element={
+              <Pictures
+                pictures={pictures}
+                onAdd={addPicture}
+                selectedCategory={selectedCategory}
+                searchText={searchText}
+                onPictureClick={setSelectedPicture}
+                favorites={favorites}
+                toggleFavorite={toggleFavorite}
+                token={token}
+              />
+            }
+          />
+          <Route
+            path="/cart"
+            element={
+              <Cart
+                pictures={cartPictures}
+                remove={removePicture}
+                updateCartNum={updateCartNum}
+                resetCategory={resetCategory}
+                resetSearch={resetSearch}
+              />
+            }
+          />
+          <Route path="/admin" element={<AdminLayout />}>
+            <Route path="dashboard" element={<AdminDashboard />} />
+            <Route path="add-picture" element={<AdminAddPicture />} />
+            <Route path="manage-pictures" element={<AdminManagePictures />} />
+            <Route path="edit-picture/:id" element={<AdminEditPicture />} />
+            <Route path="add-category" element={<AdminAddCategory />} />
+            <Route path="preview" element={<AdminPreviewGallery />} />
+          </Route>
+          <Route
+            path="/favorites"
+            element={
+              <Favorites
+                favorites={favorites}
+                onAdd={addPicture}
+                toggleFavorite={toggleFavorite}
+              />
+            }
+          />
+        </Routes>
+
+        {selectedPicture && (
+          <Modal picture={selectedPicture} onClose={closeModal} />
+        )}
+
+        {!isAdmin && <Footer />}
+      </>
+    );
+  }
   return (
-    <BrowserRouter className="App">
-      <NavBar
-        cartNum={cartNum}
-        categories={categories}
-        onFilter={handleFilter}
-        selectedCategory={selectedCategory}
-        onSearch={handleSearch}
-        token={token}
-        onLogout={handleLogout}
-      />
-
-      <Breadcrumbs
-        selectedCategory={selectedCategory}
-        resetCategory={resetCategory}
-      />
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/login" element={<LoginPage addToken={addToken} />} />
-        <Route path="/register" element={<RegisterPage />} />
-        <Route
-          path="/gallery"
-          element={
-            <Pictures
-              pictures={pictures}
-              onAdd={addPicture}
-              selectedCategory={selectedCategory}
-              searchText={searchText}
-              onPictureClick={setSelectedPicture}
-              favorites={favorites}
-              toggleFavorite={toggleFavorite}
-              token={token}
-            />
-          }
-        />
-        <Route
-          path="/cart"
-          element={
-            <Cart
-              pictures={cartPictures}
-              remove={removePicture}
-              updateCartNum={updateCartNum}
-              resetCategory={resetCategory}
-              resetSearch={resetSearch}
-            />
-          }
-        />
-
-        <Route
-          path="/favorites"
-          element={
-            <Favorites
-              favorites={favorites}
-              onAdd={addPicture}
-              toggleFavorite={toggleFavorite}
-            />
-          }
-        />
-      </Routes>
-
-      {selectedPicture && (
-        <Modal picture={selectedPicture} onClose={closeModal} />
-      )}
-
-      <Footer />
+    <BrowserRouter>
+      <AppContent />
     </BrowserRouter>
   );
 }

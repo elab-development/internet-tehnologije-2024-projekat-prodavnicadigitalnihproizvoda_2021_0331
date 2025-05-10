@@ -106,6 +106,7 @@ Route::group(['middleware' => ['auth:sanctum', 'role:admin']], function () {
     Route::get('/users/{id}', [UserController::class, 'show']); 
     Route::post('/pictures/upload', [PictureController::class, 'upload']);
 });
+
  
 // ------------------------------------
 // Paginate ruta

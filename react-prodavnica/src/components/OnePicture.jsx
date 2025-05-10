@@ -7,6 +7,7 @@ function OnePicture({
   onPictureClick,
   isFavorite,
   toggleFavorite,
+  readonly = false,
 }) {
   return (
     <div className="card">

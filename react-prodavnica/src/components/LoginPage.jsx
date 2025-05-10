@@ -25,14 +25,22 @@ const LoginPage = ({ addToken }) => {
 
         if (res.data.success === true) {
           const token = res.data.access_token;
+          const role = res.data.user.role;
+
           window.sessionStorage.setItem("auth_token", token);
+          window.sessionStorage.setItem("user_role", role);
           addToken(token);
 
-          navigate("/gallery");
+          if (role === "admin") {
+            navigate("/admin/dashboard");
+          } else {
+            navigate("/gallery");
+          }
         }
       })
       .catch((e) => {
         console.log(e);
+        alert("Login failed!");
       });
   }
 
