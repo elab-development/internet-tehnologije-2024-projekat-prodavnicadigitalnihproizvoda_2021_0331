@@ -11,6 +11,7 @@ use App\Models\Picture;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Resources\PictureResource;
 use Laravel\Sanctum\PersonalAccessToken;
+use App\Http\Controllers\SalesController;
 
 
 
@@ -111,6 +112,10 @@ Route::group(['middleware' => ['auth:sanctum', 'role:admin']], function () {
 // ------------------------------------
 // Paginate ruta
 Route::get('/paginate', [PictureController::class, 'paginate_pictures']);
+
+//--------------------------------------
+Route::get('/sales-by-category', [SalesController::class, 'salesByCategory']);
+
 
 
 
