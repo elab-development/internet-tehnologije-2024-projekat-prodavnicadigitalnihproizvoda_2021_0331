@@ -37,7 +37,14 @@ const RegisterPage = () => {
         navigate("/login");
       })
       .catch((e) => {
-        console.log(e);
+        if (e.response?.status === 422) {
+          const errors = e.response.data.errors;
+          alert(
+            "Registration error:\n" + Object.values(errors).flat().join("\n")
+          );
+        } else {
+          console.log(e);
+        }
       });
   }
 
