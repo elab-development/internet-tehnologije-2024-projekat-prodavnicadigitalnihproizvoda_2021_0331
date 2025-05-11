@@ -112,4 +112,14 @@ public function downloadHighRes($cartId)
     ]);
 }
 
+
+public function purchaseHistory()
+{
+    return Cart::with('picture')
+        ->where('user_id', auth()->id())
+        ->orderByDesc('created_at')
+        ->get();
+}
+
+
 }

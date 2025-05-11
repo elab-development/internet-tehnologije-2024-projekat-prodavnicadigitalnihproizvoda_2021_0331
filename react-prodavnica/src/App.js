@@ -21,6 +21,7 @@ import AdminAddCategory from "./pages/admin/AdminAddCategory";
 import AdminLayout from "./pages/admin/AdminLayout";
 import AdminPreviewGallery from "./pages/admin/AdminPreviewGallery";
 import AdminSalesChart from "./pages/admin/AdminSalesChart";
+import PurchaseHistory from "./components/PurchaseHistory";
 
 function App() {
   const [token, setToken] = useState(() =>
@@ -204,6 +205,8 @@ function App() {
               />
             }
           />
+
+          <Route path="/purchase-history" element={<PurchaseHistory />} />
           <Route
             path="/admin"
             element={<AdminLayout onLogout={handleLogout} />}

@@ -89,6 +89,8 @@ Route::group(['middleware' => ['auth:sanctum','role:user']], function () {
     Route::get('/profile', function (Request $request) {
         return auth()->user();
     });
+    Route::get('/purchase-history', [CartController::class, 'purchaseHistory']);
+
  
     Route::get('/cart', [CartController::class, 'index']); 
     Route::post('/cart', [CartController::class, 'add']); 

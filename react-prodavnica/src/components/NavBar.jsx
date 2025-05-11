@@ -76,16 +76,30 @@ function NavBar({
               </Link>
             </li>
 
-            <li className="nav-item">
-              <Link
-                to="/favorites"
-                className={`nav-link ${
-                  location.pathname === "/favorites" ? "active" : ""
-                }`}
-              >
-                Favorites
-              </Link>
-            </li>
+            {token && (
+              <>
+                <li className="nav-item">
+                  <Link
+                    to="/favorites"
+                    className={`nav-link ${
+                      location.pathname === "/favorites" ? "active" : ""
+                    }`}
+                  >
+                    Favorites
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link
+                    to="/purchase-history"
+                    className={`nav-link ${
+                      location.pathname === "/purchase-history" ? "active" : ""
+                    }`}
+                  >
+                    My Purchases
+                  </Link>
+                </li>
+              </>
+            )}
 
             <li className="nav-item">
               <Link
