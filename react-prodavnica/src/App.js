@@ -23,12 +23,10 @@ import AdminPreviewGallery from "./pages/admin/AdminPreviewGallery";
 import AdminSalesChart from "./pages/admin/AdminSalesChart";
 
 function App() {
-  //const [token, setToken] = useState();
   const [token, setToken] = useState(() =>
     sessionStorage.getItem("auth_token")
   );
 
-  const categories = ["Nature", "Portrait", "Abstract"];
   const [cartNum, setCartNum] = useState(0);
   const [cartPictures, setCartPictures] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("all");
@@ -56,6 +54,20 @@ function App() {
       })
       .catch((error) => {
         console.error("Greška pri dobijanju slika:", error);
+      });
+  }, []);
+
+  const [categories, setCategories] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get("/api/categories")
+      .then((res) => {
+        const categoryNames = res.data.map((cat) => cat.name);
+        setCategories(categoryNames);
+      })
+      .catch((err) => {
+        console.error("Error fetching categories:", err);
       });
   }, []);
 

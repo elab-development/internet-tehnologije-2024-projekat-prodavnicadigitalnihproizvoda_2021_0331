@@ -42,6 +42,8 @@ class CartController extends Controller
 
         ]);
 
+        $picture->increment('downloads');
+
         return response()->json(['message' => 'Item bought', 'cart' => $cart], 201);
     }
 

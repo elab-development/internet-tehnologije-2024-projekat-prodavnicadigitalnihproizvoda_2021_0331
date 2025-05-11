@@ -14,6 +14,7 @@ function NavBar({
   onLogout,
 }) {
   const navigate = useNavigate();
+  const [searchInput, setSearchInput] = React.useState("");
 
   function handleLogout() {
     axios
@@ -34,7 +35,7 @@ function NavBar({
         console.log("Logout error:", error);
       })
       .finally(() => {
-        onLogout(navigate); // << poziva funkciju iz App.js
+        onLogout(navigate);
       });
   }
 
@@ -117,14 +118,24 @@ function NavBar({
                   </option>
                 ))}
               </select>
-              <form className="d-flex">
+              <form
+                className="d-flex"
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  onSearch(searchInput);
+                }}
+              >
                 <input
                   className="form-control me-2"
                   type="search"
                   placeholder="Search"
                   aria-label="Search"
-                  onChange={(e) => handleSearchChange(e)}
+                  value={searchInput}
+                  onChange={(e) => setSearchInput(e.target.value)}
                 />
+                <button className="btn btn-outline-light" type="submit">
+                  🔍
+                </button>
               </form>
             </div>
           )}
