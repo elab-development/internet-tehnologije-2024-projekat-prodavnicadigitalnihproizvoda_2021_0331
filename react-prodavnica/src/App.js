@@ -20,6 +20,7 @@ import AdminEditPicture from "./pages/admin/AdminEditPicture";
 import AdminAddCategory from "./pages/admin/AdminAddCategory";
 import AdminLayout from "./pages/admin/AdminLayout";
 import AdminPreviewGallery from "./pages/admin/AdminPreviewGallery";
+import AdminSalesChart from "./pages/admin/AdminSalesChart";
 
 function App() {
   //const [token, setToken] = useState();
@@ -191,13 +192,17 @@ function App() {
               />
             }
           />
-          <Route path="/admin" element={<AdminLayout />}>
+          <Route
+            path="/admin"
+            element={<AdminLayout onLogout={handleLogout} />}
+          >
             <Route path="dashboard" element={<AdminDashboard />} />
             <Route path="add-picture" element={<AdminAddPicture />} />
             <Route path="manage-pictures" element={<AdminManagePictures />} />
             <Route path="edit-picture/:id" element={<AdminEditPicture />} />
             <Route path="add-category" element={<AdminAddCategory />} />
             <Route path="preview" element={<AdminPreviewGallery />} />
+            <Route path="sales-chart" element={<AdminSalesChart />} />
           </Route>
           <Route
             path="/favorites"

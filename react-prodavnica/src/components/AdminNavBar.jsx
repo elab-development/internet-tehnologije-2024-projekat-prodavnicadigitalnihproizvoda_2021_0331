@@ -1,13 +1,11 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-const AdminNavBar = () => {
+const AdminNavBar = ({ onLogout }) => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    sessionStorage.removeItem("auth_token");
-    sessionStorage.removeItem("user_role");
-    navigate("/login");
+    onLogout(navigate);
   };
 
   return (
@@ -28,6 +26,9 @@ const AdminNavBar = () => {
         </Link>
         <Link to="/admin/preview" style={styles.link}>
           Preview Gallery
+        </Link>
+        <Link to="/admin/sales-chart" style={styles.link}>
+          Sales Chart
         </Link>
       </div>
       <button onClick={handleLogout} style={styles.logoutBtn}>

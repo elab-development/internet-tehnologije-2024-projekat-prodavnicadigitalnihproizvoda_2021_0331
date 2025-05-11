@@ -8,19 +8,30 @@ const RegisterPage = () => {
     name: "",
     email: "",
     password: "",
+    repeatedPassword: "",
   });
 
   let navigate = useNavigate();
+
   function handleInput(e) {
-    let newUserData = userData;
-    newUserData[e.target.name] = e.target.value;
-    setUserData(newUserData);
+    setUserData((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
   }
 
   function handleRegister(e) {
     e.preventDefault();
+
+    if (userData.password !== userData.repeatedPassword) {
+      alert("Passwords do not match!");
+      return;
+    }
+
+    const { name, email, password } = userData;
+
     axios
-      .post("api/register", userData)
+      .post("api/register", { name, email, password })
       .then((res) => {
         console.log(res.data);
         navigate("/login");
@@ -92,12 +103,16 @@ const RegisterPage = () => {
 
               <div className="form-outline mb-3">
                 <input
-                  type="repeatedPassword"
+                  type="password"
                   id="form3Example5"
                   className="form-control form-control-lg"
                   placeholder="Repeat your password"
                   name="repeatedPassword"
+                  onInput={handleInput}
                 />
+                <label className="form-label" htmlFor="form3Example5">
+                  Repeat Password
+                </label>
               </div>
 
               <div className="text-center text-lg-start mt-4 pt-2">
