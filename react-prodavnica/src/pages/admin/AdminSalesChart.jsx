@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import RequireAdmin from "./RequireAdmin";
 import {
   BarChart,
   Bar,
@@ -46,85 +47,74 @@ const AdminSalesChart = () => {
       .catch((err) => console.error("Error fetching top buyers:", err));
   }, []);
 
-  const [topPictures, setTopPictures] = useState([]);
-
-  useEffect(() => {
-    axios
-      .get("/api/top-pictures", {
-        headers: {
-          Authorization: `Bearer ${sessionStorage.getItem("auth_token")}`,
-        },
-      })
-      .then((res) => setTopPictures(res.data))
-      .catch((err) => console.error("Error fetching top pictures:", err));
-  }, []);
-
   return (
-    <div style={{ padding: "2rem" }}>
-      <h2>Sales by Category</h2>
-      <br />
-      {data.length > 0 ? (
-        <ResponsiveContainer width="100%" height={400}>
-          <BarChart
-            data={data}
-            margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
-          >
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="category_name" />
-            <YAxis />
-            <Tooltip />
-            <Legend />
-            <Bar
-              dataKey="total_sales"
-              fill="#8884d8"
-              name="Total Sales (EUR)"
-            />
-            <Bar
-              dataKey="total_sales_count"
-              fill="#82ca9d"
-              name="Number of Sales"
-            />
-          </BarChart>
-        </ResponsiveContainer>
-      ) : (
-        <p>No sales data available.</p>
-      )}
-
-      <br />
-      <br />
-      <br />
-      <h2>Top 5 Buyers by Purchase Count</h2>
-      {topBuyers.length > 0 ? (
-        <ResponsiveContainer width="100%" height={500}>
-          <PieChart>
-            <Pie
-              data={topBuyers}
-              dataKey="purchase_count"
-              nameKey="name"
-              cx="50%"
-              cy="50%"
-              outerRadius={180}
-              label
+    <RequireAdmin>
+      <div style={{ padding: "2rem" }}>
+        <h2>Sales by Category</h2>
+        <br />
+        {data.length > 0 ? (
+          <ResponsiveContainer width="100%" height={400}>
+            <BarChart
+              data={data}
+              margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
             >
-              {topBuyers.map((_, index) => (
-                <Cell
-                  key={`cell-${index}`}
-                  fill={
-                    ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#AA336A"][
-                      index % 5
-                    ]
-                  }
-                />
-              ))}
-            </Pie>
-            <Tooltip />
-            <Legend />
-          </PieChart>
-        </ResponsiveContainer>
-      ) : (
-        <p>No top buyers data available.</p>
-      )}
-    </div>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="category_name" />
+              <YAxis />
+              <Tooltip />
+              <Legend />
+              <Bar
+                dataKey="total_sales"
+                fill="#8884d8"
+                name="Total Sales (EUR)"
+              />
+              <Bar
+                dataKey="total_sales_count"
+                fill="#82ca9d"
+                name="Number of Sales"
+              />
+            </BarChart>
+          </ResponsiveContainer>
+        ) : (
+          <p>No sales data available.</p>
+        )}
+
+        <br />
+        <br />
+        <br />
+        <h2>Top 5 Buyers by Purchase Count</h2>
+        {topBuyers.length > 0 ? (
+          <ResponsiveContainer width="100%" height={500}>
+            <PieChart>
+              <Pie
+                data={topBuyers}
+                dataKey="purchase_count"
+                nameKey="name"
+                cx="50%"
+                cy="50%"
+                outerRadius={180}
+                label
+              >
+                {topBuyers.map((_, index) => (
+                  <Cell
+                    key={`cell-${index}`}
+                    fill={
+                      ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#AA336A"][
+                        index % 5
+                      ]
+                    }
+                  />
+                ))}
+              </Pie>
+              <Tooltip />
+              <Legend />
+            </PieChart>
+          </ResponsiveContainer>
+        ) : (
+          <p>No top buyers data available.</p>
+        )}
+      </div>
+    </RequireAdmin>
   );
 };
 

@@ -95,7 +95,7 @@ function NavBar({
                       location.pathname === "/purchase-history" ? "active" : ""
                     }`}
                   >
-                    My Purchases
+                    Purchase History
                   </Link>
                 </li>
               </>

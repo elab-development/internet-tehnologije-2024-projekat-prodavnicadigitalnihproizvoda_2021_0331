@@ -37,12 +37,51 @@ const Cart = ({
     }
 
     const form = e.target.form;
+
+    const cardNumber = form.typeText.value.trim();
+    const cardName = form.typeName.value.trim();
+    const expiration = form.typeExp.value.trim();
+    const cvv = form.typeCvv.value.trim();
+
+    if (!cardNumber || !cardName || !expiration || !cvv) {
+      alert("Please fill in all payment fields.");
+      return;
+    }
+
+    if (!/^\d{16}$/.test(cardNumber.replace(/\s+/g, ""))) {
+      alert("Invalid card number. Please enter 16 digits.");
+      return;
+    }
+
+    if (!/^\d{3}$/.test(cvv)) {
+      alert("Invalid CVV. Please enter 3 digits.");
+      return;
+    }
+
+    if (!/^\d{2}\/\d{2}$/.test(expiration)) {
+      alert("Invalid expiration date. Use format MM/YY.");
+      return;
+    }
+    const [expMonth, expYear] = expiration.split("/").map(Number);
+    const now = new Date();
+    const currentMonth = now.getMonth() + 1;
+    const currentYear = now.getFullYear() % 100;
+
+    if (
+      expYear < currentYear ||
+      (expYear === currentYear && expMonth < currentMonth)
+    ) {
+      alert("Card is expired. Please use a valid card.");
+      return;
+    }
+
     setPaymentData({
-      cardNumber: form.typeText.value,
-      cardName: form.typeName.value,
-      expiration: form.typeExp.value,
-      cvv: form.typeCvv.value,
+      cardNumber,
+      cardName,
+      expiration,
+      cvv,
     });
+
     setIsModalOpen(true);
   };
 
@@ -57,8 +96,6 @@ const Cart = ({
 
     alert("Purchase confirmed!");
     setIsModalOpen(false);
-
-    //const token = sessionStorage.getItem("auth_token");
 
     try {
       for (const pic of cartItems) {
@@ -217,7 +254,7 @@ const Cart = ({
                           id="typeText"
                           className="form-control form-control-lg"
                           size="17"
-                          defaultValue="1234 5678 9012 3457"
+                          placeholder="1234 5678 9012 3457"
                           minLength="19"
                           maxLength="19"
                         />
@@ -231,7 +268,7 @@ const Cart = ({
                           id="typeName"
                           className="form-control form-control-lg"
                           size="17"
-                          defaultValue="John Smith"
+                          placeholder="John Smith"
                         />
                         <label className="form-label" htmlFor="typeName">
                           Name on card
@@ -244,7 +281,7 @@ const Cart = ({
                               type="text"
                               id="typeExp"
                               className="form-control form-control-lg"
-                              defaultValue="01/22"
+                              placeholder="01/22"
                               size="7"
                               minLength="7"
                               maxLength="7"
@@ -260,7 +297,7 @@ const Cart = ({
                               type="password"
                               id="typeCvv"
                               className="form-control form-control-lg"
-                              defaultValue="•••"
+                              placeholder="•••"
                               size="1"
                               minLength="3"
                               maxLength="3"

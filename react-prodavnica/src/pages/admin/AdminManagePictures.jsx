@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import RequireAdmin from "./RequireAdmin";
 
 const AdminManagePictures = () => {
   const [pictures, setPictures] = useState([]);
@@ -31,47 +32,49 @@ const AdminManagePictures = () => {
   };
 
   return (
-    <div style={styles.container}>
-      <h2 style={styles.heading}>Manage Pictures</h2>
+    <RequireAdmin>
+      <div style={styles.container}>
+        <h2 style={styles.heading}>Manage Pictures</h2>
 
-      {pictures.length === 0 ? (
-        <p>No pictures available.</p>
-      ) : (
-        <table style={styles.table}>
-          <thead>
-            <tr>
-              <th>Title</th>
-              <th>Category</th>
-              <th>Price (EUR)</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {pictures.map((pic) => (
-              <tr key={pic.id}>
-                <td>{pic.title}</td>
-                <td>{pic.category_name}</td>
-                <td>{pic.price}</td>
-                <td>
-                  <button
-                    style={styles.editBtn}
-                    onClick={() => navigate(`/admin/edit-picture/${pic.id}`)}
-                  >
-                    Edit
-                  </button>
-                  <button
-                    style={styles.deleteBtn}
-                    onClick={() => handleDelete(pic.id)}
-                  >
-                    Delete
-                  </button>
-                </td>
+        {pictures.length === 0 ? (
+          <p>No pictures available.</p>
+        ) : (
+          <table style={styles.table}>
+            <thead>
+              <tr>
+                <th>Title</th>
+                <th>Category</th>
+                <th>Price (EUR)</th>
+                <th>Actions</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      )}
-    </div>
+            </thead>
+            <tbody>
+              {pictures.map((pic) => (
+                <tr key={pic.id}>
+                  <td>{pic.title}</td>
+                  <td>{pic.category_name}</td>
+                  <td>{pic.price}</td>
+                  <td>
+                    <button
+                      style={styles.editBtn}
+                      onClick={() => navigate(`/admin/edit-picture/${pic.id}`)}
+                    >
+                      Edit
+                    </button>
+                    <button
+                      style={styles.deleteBtn}
+                      onClick={() => handleDelete(pic.id)}
+                    >
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
+      </div>
+    </RequireAdmin>
   );
 };
 

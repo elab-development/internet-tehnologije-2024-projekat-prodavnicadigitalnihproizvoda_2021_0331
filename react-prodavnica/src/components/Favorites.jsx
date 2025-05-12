@@ -7,6 +7,7 @@ const Favorites = ({ favorites, onAdd, toggleFavorite }) => {
       <div className="container py-5">
         <div className="text-center">
           <h3 className="mb-4">Your Favorite Pictures</h3>
+          <br />
           {favorites.length > 0 ? (
             <div className="row">
               {favorites.map((picture, index) => (

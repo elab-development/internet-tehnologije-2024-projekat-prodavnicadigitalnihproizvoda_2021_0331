@@ -1,70 +1,41 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import RequireAdmin from "./RequireAdmin";
 
 const AdminDashboard = () => {
-  const [isAdmin, setIsAdmin] = useState(false);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const token = sessionStorage.getItem("auth_token");
-
-    if (!token) {
-      alert("You must be logged in!");
-      navigate("/login");
-      return;
-    }
-
-    axios
-      .get("/api/user", {
-        headers: { Authorization: `Bearer ${token}` },
-      })
-      .then((res) => {
-        if (res.data.role === "admin") {
-          setIsAdmin(true);
-        } else {
-          alert("You do not have permission to access this page.");
-          navigate("/gallery");
-        }
-      })
-      .catch((err) => {
-        console.error("Error fetching user:", err);
-        navigate("/login");
-      });
-  }, [navigate]);
-
-  if (!isAdmin) {
-    return <p className="text-center mt-5">Checking access...</p>;
-  }
-
   return (
-    <div style={styles.container}>
-      <h1 style={styles.heading}>Admin Dashboard</h1>
-      <p style={styles.subheading}>
-        Welcome, administrator. Please select an action:
-      </p>
+    <RequireAdmin>
+      <div style={styles.container}>
+        <h1 style={styles.heading}>Admin Dashboard</h1>
+        <p style={styles.subheading}>
+          Welcome, administrator. Please select an action:
+        </p>
 
-      <div style={styles.buttonContainer}>
-        <button
-          style={styles.button}
-          onClick={() => navigate("/admin/add-picture")}
-        >
-          <strong>Add New Picture</strong>
-        </button>
-        <button
-          style={styles.button}
-          onClick={() => navigate("/admin/manage-pictures")}
-        >
-          <strong>Manage Pictures</strong>
-        </button>
-        <button
-          style={styles.button}
-          onClick={() => navigate("/admin/add-category")}
-        >
-          <strong>Add New Category</strong>
-        </button>
+        <div style={styles.buttonContainer}>
+          <button
+            style={styles.button}
+            onClick={() => navigate("/admin/add-picture")}
+          >
+            <strong>Add New Picture</strong>
+          </button>
+          <button
+            style={styles.button}
+            onClick={() => navigate("/admin/manage-pictures")}
+          >
+            <strong>Manage Pictures</strong>
+          </button>
+          <button
+            style={styles.button}
+            onClick={() => navigate("/admin/add-category")}
+          >
+            <strong>Add New Category</strong>
+          </button>
+        </div>
       </div>
-    </div>
+    </RequireAdmin>
   );
 };
 

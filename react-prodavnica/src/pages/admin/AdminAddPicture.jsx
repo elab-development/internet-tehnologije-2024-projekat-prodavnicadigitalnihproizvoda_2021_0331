@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import RequireAdmin from "./RequireAdmin";
 
 const AdminAddPicture = () => {
   const [formData, setFormData] = useState({
@@ -55,81 +56,83 @@ const AdminAddPicture = () => {
   };
 
   return (
-    <div style={styles.container}>
-      <h2 style={styles.heading}>Add New Picture</h2>
-      <form
-        onSubmit={handleSubmit}
-        encType="multipart/form-data"
-        style={styles.form}
-      >
-        <input
-          type="text"
-          name="title"
-          placeholder="Title"
-          onChange={handleChange}
-          required
-          style={styles.input}
-        />
-        <input
-          type="text"
-          name="description"
-          placeholder="Description"
-          onChange={handleChange}
-          required
-          style={styles.input}
-        />
-        <input
-          type="number"
-          name="price"
-          placeholder="Price (€)"
-          onChange={handleChange}
-          required
-          style={styles.input}
-        />
-        <select
-          name="category_id"
-          onChange={handleChange}
-          required
-          defaultValue=""
-          style={styles.input}
+    <RequireAdmin>
+      <div style={styles.container}>
+        <h2 style={styles.heading}>Add New Picture</h2>
+        <form
+          onSubmit={handleSubmit}
+          encType="multipart/form-data"
+          style={styles.form}
         >
-          <option value="" disabled>
-            Select Category
-          </option>
-          {categories.map((cat) => (
-            <option key={cat.id} value={cat.id}>
-              {cat.name}
+          <input
+            type="text"
+            name="title"
+            placeholder="Title"
+            onChange={handleChange}
+            required
+            style={styles.input}
+          />
+          <input
+            type="text"
+            name="description"
+            placeholder="Description"
+            onChange={handleChange}
+            required
+            style={styles.input}
+          />
+          <input
+            type="number"
+            name="price"
+            placeholder="Price (€)"
+            onChange={handleChange}
+            required
+            style={styles.input}
+          />
+          <select
+            name="category_id"
+            onChange={handleChange}
+            required
+            defaultValue=""
+            style={styles.input}
+          >
+            <option value="" disabled>
+              Select Category
             </option>
-          ))}
-        </select>
+            {categories.map((cat) => (
+              <option key={cat.id} value={cat.id}>
+                {cat.name}
+              </option>
+            ))}
+          </select>
 
-        <div style={styles.labelGroup}>
-          <label style={styles.label}>Low Resolution Image:</label>
-          <input
-            type="file"
-            name="low_res_file"
-            onChange={handleChange}
-            required
-            style={styles.input}
-          />
-        </div>
+          <div style={styles.labelGroup}>
+            <label style={styles.label}>Low Resolution Image:</label>
+            <input
+              type="file"
+              name="low_res_file"
+              onChange={handleChange}
+              required
+              style={styles.input}
+            />
+          </div>
 
-        <div style={styles.labelGroup}>
-          <label style={styles.label}>High Resolution Image:</label>
-          <input
-            type="file"
-            name="high_res_file"
-            onChange={handleChange}
-            required
-            style={styles.input}
-          />
-        </div>
+          <div style={styles.labelGroup}>
+            <label style={styles.label}>High Resolution Image:</label>
+            <input
+              type="file"
+              name="high_res_file"
+              onChange={handleChange}
+              required
+              style={styles.input}
+            />
+          </div>
 
-        <button type="submit" style={styles.button}>
-          Submit Picture
-        </button>
-      </form>
-    </div>
+          <button type="submit" style={styles.button}>
+            Submit Picture
+          </button>
+        </form>
+      </div>
+    </RequireAdmin>
   );
 };
 

@@ -11,9 +11,10 @@ const Pictures = ({
   favorites,
   toggleFavorite,
   token,
+  currentPage,
+  setCurrentPage,
 }) => {
   const itemsPerPage = 4;
-  const [currentPage, setCurrentPage] = useState(1);
   const navigate = useNavigate();
 
   const handleToggleFavorite = (picture) => {
@@ -40,10 +41,6 @@ const Pictures = ({
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
-
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [selectedCategory]);
 
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);

@@ -92,11 +92,26 @@ class PictureController extends Controller
     }
 
     public function destroy(Picture $picture)
-    {
-        
-        $picture->delete();
-        return response()->json('Picture is deleted successfully');    
+{
+    
+    $highResPath = public_path($picture->high_res_path);
+    $lowResPath = public_path($picture->low_res_path);
+
+    
+    if (file_exists($highResPath)) {
+        unlink($highResPath);
     }
+
+    if (file_exists($lowResPath)) {
+        unlink($lowResPath);
+    }
+
+    
+    $picture->delete();
+
+    return response()->json('Picture and files deleted successfully');
+}
+
 
     public function searchByTitle($title)
 {

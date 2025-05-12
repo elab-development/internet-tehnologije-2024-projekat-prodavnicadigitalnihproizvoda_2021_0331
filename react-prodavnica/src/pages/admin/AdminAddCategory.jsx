@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import RequireAdmin from "./RequireAdmin";
 
 const AdminAddCategory = () => {
   const [formData, setFormData] = useState({
@@ -33,31 +34,33 @@ const AdminAddCategory = () => {
   };
 
   return (
-    <div style={styles.container}>
-      <h2 style={styles.heading}>Add New Category</h2>
-      <form onSubmit={handleSubmit} style={styles.form}>
-        <input
-          type="text"
-          name="name"
-          placeholder="Category Name"
-          value={formData.name}
-          onChange={handleChange}
-          required
-          style={styles.input}
-        />
-        <textarea
-          name="description"
-          placeholder="Description (optional)"
-          value={formData.description}
-          onChange={handleChange}
-          rows={4}
-          style={styles.textarea}
-        />
-        <button type="submit" style={styles.button}>
-          Create Category
-        </button>
-      </form>
-    </div>
+    <RequireAdmin>
+      <div style={styles.container}>
+        <h2 style={styles.heading}>Add New Category</h2>
+        <form onSubmit={handleSubmit} style={styles.form}>
+          <input
+            type="text"
+            name="name"
+            placeholder="Category Name"
+            value={formData.name}
+            onChange={handleChange}
+            required
+            style={styles.input}
+          />
+          <textarea
+            name="description"
+            placeholder="Description (optional)"
+            value={formData.description}
+            onChange={handleChange}
+            rows={4}
+            style={styles.textarea}
+          />
+          <button type="submit" style={styles.button}>
+            Create Category
+          </button>
+        </form>
+      </div>
+    </RequireAdmin>
   );
 };
 

@@ -1,5 +1,6 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
+import RequireAdmin from "../pages/admin/RequireAdmin";
 
 const AdminNavBar = ({ onLogout }) => {
   const navigate = useNavigate();
@@ -9,32 +10,37 @@ const AdminNavBar = ({ onLogout }) => {
   };
 
   return (
-    <nav style={styles.nav}>
-      <div style={styles.left}>
-        <strong>Admin Panel</strong>
-        <Link to="/admin/dashboard" style={styles.link}>
-          Dashboard
-        </Link>
-        <Link to="/admin/add-picture" style={styles.link}>
-          Add Picture
-        </Link>
-        <Link to="/admin/manage-pictures" style={styles.link}>
-          Manage Pictures
-        </Link>
-        <Link to="/admin/add-category" style={styles.link}>
-          Add Category
-        </Link>
-        <Link to="/admin/preview" style={styles.link}>
-          Preview Gallery
-        </Link>
-        <Link to="/admin/sales-chart" style={styles.link}>
-          Sales Chart
-        </Link>
-      </div>
-      <button onClick={handleLogout} style={styles.logoutBtn}>
-        Logout
-      </button>
-    </nav>
+    <RequireAdmin>
+      <nav style={styles.nav}>
+        <div style={styles.left}>
+          <strong>Admin Panel</strong>
+          <Link to="/admin/dashboard" style={styles.link}>
+            Dashboard
+          </Link>
+          <Link to="/admin/add-picture" style={styles.link}>
+            Add Picture
+          </Link>
+          <Link to="/admin/manage-pictures" style={styles.link}>
+            Manage Pictures
+          </Link>
+          <Link to="/admin/add-category" style={styles.link}>
+            Add Category
+          </Link>
+          <Link to="/admin/manage-categories" style={styles.link}>
+            Manage Categories
+          </Link>
+          <Link to="/admin/preview" style={styles.link}>
+            Preview Gallery
+          </Link>
+          <Link to="/admin/sales-chart" style={styles.link}>
+            Analytics
+          </Link>
+        </div>
+        <button onClick={handleLogout} style={styles.logoutBtn}>
+          Logout
+        </button>
+      </nav>
+    </RequireAdmin>
   );
 };
 

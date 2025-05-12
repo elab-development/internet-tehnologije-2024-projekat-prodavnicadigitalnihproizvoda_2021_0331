@@ -37,14 +37,22 @@ class CategoryController extends Controller
     }
 
     public function destroy($id)
-    {
-        $category = Category::find($id);
+{
+    $category = Category::find($id);
 
-        if (!$category) {
-            return response()->json(['message' => 'Category not found'], 404);
-        }
-
-        $category->delete();
-        return response()->json(['message' => 'Category deleted successfully'], 200);
+    if (!$category) {
+        return response()->json(['error' => 'Category not found'], 404);
     }
+
+    
+    $hasPictures = Picture::where('category_id', $id)->exists();
+
+    if ($hasPictures) {
+        return response()->json(['error' => 'Cannot delete category with assigned pictures'], 400);
+    }
+
+    $category->delete();
+
+    return response()->json(['message' => 'Category deleted successfully'], 200);
+}
 }

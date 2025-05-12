@@ -23,9 +23,15 @@ function OnePicture({
               ? picture.low_res_path
               : "https://via.placeholder.com/200"
           }
-          className="w-100"
           alt={picture.title}
+          style={{
+            width: "100%",
+            height: "300px",
+            objectFit: "cover",
+            display: "block",
+          }}
         />
+
         <a href="#!">
           <div className="mask"></div>
           <div className="hover-overlay">

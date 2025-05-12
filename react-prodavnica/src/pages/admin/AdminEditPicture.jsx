@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
+import RequireAdmin from "./RequireAdmin";
 
 const AdminEditPicture = () => {
   const { id } = useParams();
@@ -46,57 +47,59 @@ const AdminEditPicture = () => {
     return <p style={{ textAlign: "center" }}>Loading picture...</p>;
 
   return (
-    <div style={styles.container}>
-      <h2 style={styles.heading}>Edit Picture</h2>
-      <form onSubmit={handleSubmit} style={styles.form}>
-        <input
-          type="text"
-          name="title"
-          value={picture.title}
-          onChange={handleChange}
-          placeholder="Title"
-          style={styles.input}
-          required
-        />
-        <input
-          type="text"
-          name="description"
-          value={picture.description}
-          onChange={handleChange}
-          placeholder="Description"
-          style={styles.input}
-          required
-        />
-        <input
-          type="number"
-          name="price"
-          value={picture.price}
-          onChange={handleChange}
-          placeholder="Price (€)"
-          style={styles.input}
-          required
-        />
-        <select
-          name="category_id"
-          value={picture.category_id}
-          onChange={handleChange}
-          style={styles.input}
-          required
-        >
-          <option value="" disabled>
-            Select Category
-          </option>
-          {categories.map((cat) => (
-            <option key={cat.id} value={cat.id}>
-              {cat.name}
+    <RequireAdmin>
+      <div style={styles.container}>
+        <h2 style={styles.heading}>Edit Picture</h2>
+        <form onSubmit={handleSubmit} style={styles.form}>
+          <input
+            type="text"
+            name="title"
+            value={picture.title}
+            onChange={handleChange}
+            placeholder="Title"
+            style={styles.input}
+            required
+          />
+          <input
+            type="text"
+            name="description"
+            value={picture.description}
+            onChange={handleChange}
+            placeholder="Description"
+            style={styles.input}
+            required
+          />
+          <input
+            type="number"
+            name="price"
+            value={picture.price}
+            onChange={handleChange}
+            placeholder="Price (€)"
+            style={styles.input}
+            required
+          />
+          <select
+            name="category_id"
+            value={picture.category_id}
+            onChange={handleChange}
+            style={styles.input}
+            required
+          >
+            <option value="" disabled>
+              Select Category
             </option>
-          ))}
-        </select>
-        <button type="submit" style={styles.button}>
-          Save Changes
-        </button>
-      </form>
-    </div>
+            {categories.map((cat) => (
+              <option key={cat.id} value={cat.id}>
+                {cat.name}
+              </option>
+            ))}
+          </select>
+          <button type="submit" style={styles.button}>
+            Save Changes
+          </button>
+        </form>
+      </div>
+    </RequireAdmin>
   );
 };
 

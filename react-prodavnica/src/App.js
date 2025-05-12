@@ -22,6 +22,7 @@ import AdminLayout from "./pages/admin/AdminLayout";
 import AdminPreviewGallery from "./pages/admin/AdminPreviewGallery";
 import AdminSalesChart from "./pages/admin/AdminSalesChart";
 import PurchaseHistory from "./components/PurchaseHistory";
+import AdminManageCategories from "./pages/admin/AdminManageCategories";
 
 function App() {
   const [token, setToken] = useState(() =>
@@ -35,6 +36,7 @@ function App() {
   const [selectedPicture, setSelectedPicture] = useState(null);
 
   const [favorites, setFavorites] = useLocalStorage("favorites", []);
+  const [currentPage, setCurrentPage] = useState(1);
 
   const toggleFavorite = (picture) => {
     setFavorites((prevFavorites) =>
@@ -74,12 +76,13 @@ function App() {
 
   const handleFilter = (category) => {
     setSelectedCategory(category);
+    setCurrentPage(1);
   };
 
   const handleSearch = (text) => {
     setSearchText(text);
+    setCurrentPage(1);
   };
-
   const resetCategory = () => {
     setSelectedCategory("all");
   };
@@ -190,6 +193,8 @@ function App() {
                 favorites={favorites}
                 toggleFavorite={toggleFavorite}
                 token={token}
+                currentPage={currentPage}
+                setCurrentPage={setCurrentPage}
               />
             }
           />
@@ -218,6 +223,10 @@ function App() {
             <Route path="add-category" element={<AdminAddCategory />} />
             <Route path="preview" element={<AdminPreviewGallery />} />
             <Route path="sales-chart" element={<AdminSalesChart />} />
+            <Route
+              path="manage-categories"
+              element={<AdminManageCategories />}
+            />
           </Route>
           <Route
             path="/favorites"
