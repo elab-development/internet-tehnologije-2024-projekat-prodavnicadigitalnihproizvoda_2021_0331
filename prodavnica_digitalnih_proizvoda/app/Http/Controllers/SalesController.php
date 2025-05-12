@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Models\User;
 
 class SalesController extends Controller
 {
@@ -34,4 +35,21 @@ class SalesController extends Controller
 
         return response()->json($categories);
     }
+
+
+    public function topBuyers()
+{
+    $buyers = DB::table('carts as cart')
+        ->join('users as u', 'cart.user_id', '=', 'u.id')
+        ->select(
+            'u.name',
+            DB::raw('COUNT(cart.id) as purchase_count')
+        )
+        ->groupBy('u.id', 'u.name')
+        ->orderByDesc('purchase_count')
+        ->limit(5)
+        ->get();
+
+    return response()->json($buyers);
+}
 }

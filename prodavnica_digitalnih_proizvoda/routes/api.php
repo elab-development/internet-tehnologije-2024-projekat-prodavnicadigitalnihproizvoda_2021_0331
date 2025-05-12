@@ -117,6 +117,8 @@ Route::get('/paginate', [PictureController::class, 'paginate_pictures']);
 
 //--------------------------------------
 Route::get('/sales-by-category', [SalesController::class, 'salesByCategory']);
+Route::get('/top-buyers', [SalesController::class, 'topBuyers']);
+
 
 
 
