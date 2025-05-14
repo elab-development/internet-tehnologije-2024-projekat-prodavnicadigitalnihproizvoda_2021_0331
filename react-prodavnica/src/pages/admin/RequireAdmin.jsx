@@ -36,7 +36,7 @@ const RequireAdmin = ({ children }) => {
       });
   }, [navigate]);
 
-  if (loading) return <p className="text-center mt-5">Checking access...</p>;
+  //if (loading) return <p className="text-center mt-5">Checking access...</p>;
   return allowed ? children : null;
 };
 

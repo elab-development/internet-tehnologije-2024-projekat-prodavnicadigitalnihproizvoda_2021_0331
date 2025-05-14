@@ -12,11 +12,14 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
-        return response()->json(User::all(), 200);
-        
-    }
+   public function index()
+{
+    $users = \App\Models\User::select('id', 'name', 'email', 'role', 'created_at')
+        ->orderByDesc('created_at')
+        ->get();
+ 
+    return response()->json($users);
+}
 
     /**
      * Show the form for creating a new resource.

@@ -23,6 +23,7 @@ import AdminPreviewGallery from "./pages/admin/AdminPreviewGallery";
 import AdminSalesChart from "./pages/admin/AdminSalesChart";
 import PurchaseHistory from "./components/PurchaseHistory";
 import AdminManageCategories from "./pages/admin/AdminManageCategories";
+import AdminUserList from "./pages/admin/AdminUserList";
 
 function App() {
   const [token, setToken] = useState(() =>
@@ -223,6 +224,7 @@ function App() {
             <Route path="add-category" element={<AdminAddCategory />} />
             <Route path="preview" element={<AdminPreviewGallery />} />
             <Route path="sales-chart" element={<AdminSalesChart />} />
+            <Route path="users" element={<AdminUserList />} />
             <Route
               path="manage-categories"
               element={<AdminManageCategories />}

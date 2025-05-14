@@ -35,6 +35,9 @@ const AdminNavBar = ({ onLogout }) => {
           <Link to="/admin/sales-chart" style={styles.link}>
             Analytics
           </Link>
+          <Link to="/admin/users" style={styles.link}>
+            Show Users
+          </Link>
         </div>
         <button onClick={handleLogout} style={styles.logoutBtn}>
           Logout
