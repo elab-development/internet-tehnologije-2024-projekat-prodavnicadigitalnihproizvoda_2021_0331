@@ -55,4 +55,21 @@ class CategoryController extends Controller
 
     return response()->json(['message' => 'Category deleted successfully'], 200);
 }
+public function update(Request $request, $id)
+{
+    $category = Category::find($id);
+ 
+    if (!$category) {
+        return response()->json(['error' => 'Category not found'], 404);
+    }
+ 
+    $validated = $request->validate([
+        'name' => 'required|string|max:255|unique:categories,name,' . $id,
+        'description' => 'nullable|string',
+    ]);
+ 
+    $category->update($validated);
+ 
+    return response()->json(['message' => 'Category updated successfully', 'category' => $category], 200);
+}
 }

@@ -45,6 +45,36 @@ const AdminManageCategories = () => {
     }
   };
 
+  const [editingId, setEditingId] = useState(null);
+  const [editName, setEditName] = useState("");
+  const handleEdit = (cat) => {
+    setEditingId(cat.id);
+    setEditName(cat.name);
+  };
+
+  const cancelEdit = () => {
+    setEditingId(null);
+    setEditName("");
+  };
+
+  const handleUpdate = async () => {
+    try {
+      await axios.put(
+        `/api/categories/${editingId}`,
+        { name: editName },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      alert("Category updated successfully.");
+      setEditingId(null);
+      setEditName("");
+      fetchCategories();
+    } catch (err) {
+      console.error("Update failed:", err);
+      alert("Failed to update category.");
+    }
+  };
   return (
     <RequireAdmin>
       <div style={styles.container}>
@@ -69,14 +99,43 @@ const AdminManageCategories = () => {
                     backgroundColor: index % 2 === 0 ? "#f9f9f9" : "#ffffff",
                   }}
                 >
-                  <td style={styles.td}>{cat.name}</td>
+                  <td style={styles.td}>
+                    {editingId === cat.id ? (
+                      <>
+                        <input
+                          type="text"
+                          value={editName}
+                          onChange={(e) => setEditName(e.target.value)}
+                          style={{ padding: "0.3rem", marginRight: "0.5rem" }}
+                        />
+                        <button style={styles.updateBtn} onClick={handleUpdate}>
+                          💾 Save
+                        </button>
+                        <button style={styles.cancelBtn} onClick={cancelEdit}>
+                          ❌ Cancel
+                        </button>
+                      </>
+                    ) : (
+                      cat.name
+                    )}
+                  </td>
                   <td style={{ ...styles.td, textAlign: "right" }}>
-                    <button
-                      style={styles.deleteBtn}
-                      onClick={() => handleDelete(cat.id)}
-                    >
-                      🗑️ Delete
-                    </button>
+                    {editingId !== cat.id ? (
+                      <>
+                        <button
+                          style={styles.editBtn}
+                          onClick={() => handleEdit(cat)}
+                        >
+                          ✏️ Edit
+                        </button>
+                        <button
+                          style={styles.deleteBtn}
+                          onClick={() => handleDelete(cat.id)}
+                        >
+                          🗑️ Delete
+                        </button>
+                      </>
+                    ) : null}
                   </td>
                 </tr>
               ))}
@@ -111,6 +170,35 @@ const styles = {
   deleteBtn: {
     padding: "0.4rem 0.8rem",
     backgroundColor: "#dc3545",
+    color: "white",
+    border: "none",
+    borderRadius: "4px",
+    cursor: "pointer",
+    fontWeight: "bold",
+  },
+  editBtn: {
+    padding: "0.4rem 0.8rem",
+    backgroundColor: "#007bff",
+    color: "white",
+    border: "none",
+    borderRadius: "4px",
+    cursor: "pointer",
+    fontWeight: "bold",
+    marginRight: "0.5rem",
+  },
+  updateBtn: {
+    padding: "0.3rem 0.6rem",
+    backgroundColor: "#28a745",
+    color: "white",
+    border: "none",
+    borderRadius: "4px",
+    cursor: "pointer",
+    fontWeight: "bold",
+    marginRight: "0.5rem",
+  },
+  cancelBtn: {
+    padding: "0.3rem 0.6rem",
+    backgroundColor: "#6c757d",
     color: "white",
     border: "none",
     borderRadius: "4px",

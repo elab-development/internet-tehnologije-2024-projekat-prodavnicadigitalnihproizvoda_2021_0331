@@ -104,10 +104,12 @@ Route::group(['middleware' => ['auth:sanctum','role:user']], function () {
 Route::group(['middleware' => ['auth:sanctum', 'role:admin']], function () {
     Route::resource('pictures', PictureController::class)->only(['store', 'update', 'destroy']); 
     Route::post('/categories', [CategoryController::class, 'store']); 
-    Route::delete('/categories/{id}', [CategoryController::class, 'destroy']); 
+    Route::delete('/categories/{id}', [CategoryController::class, 'destroy']);
+    Route::put('/categories/{id}', [CategoryController::class, 'update']); 
     Route::get('/users', [UserController::class, 'index']); 
     Route::get('/users/{id}', [UserController::class, 'show']); 
     Route::post('/pictures/upload', [PictureController::class, 'upload']);
+
 });
 
  
