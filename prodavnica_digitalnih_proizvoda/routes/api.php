@@ -58,6 +58,42 @@ Route::get('/random-quote', function () {
     }
 });
 
+use Illuminate\Support\Facades\Http;
+
+Route::get('/art-of-the-day', function () {
+    $search = Http::get("https://collectionapi.metmuseum.org/public/collection/v1/search", [
+        'q' => 'painting',
+        'hasImages' => true
+    ]);
+
+    if (!$search->successful() || empty($search->json()['objectIDs'])) {
+        return response()->json([
+            'title' => 'Unknown artwork',
+            'artist' => 'Unknown artist'
+        ]);
+    }
+
+    $objectIDs = $search->json()['objectIDs'];
+    $randomID = $objectIDs[array_rand($objectIDs)];
+
+    $object = Http::get("https://collectionapi.metmuseum.org/public/collection/v1/objects/{$randomID}");
+
+    if (!$object->successful()) {
+        return response()->json([
+            'title' => 'Unknown artwork',
+            'artist' => 'Unknown artist'
+        ]);
+    }
+
+    $data = $object->json();
+
+    return response()->json([
+        'title' => $data['title'] ?? 'Unknown title',
+        'artist' => $data['artistDisplayName'] ?: 'Unknown artist'
+    ]);
+});
+
+
  Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
  });

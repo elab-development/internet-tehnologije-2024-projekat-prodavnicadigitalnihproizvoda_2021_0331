@@ -5,10 +5,14 @@ const HomePage = () => {
   const [quote, setQuote] = useState("");
   const [author, setAuthor] = useState("");
   const hasFetched = useRef(false);
+  const [artworkTitle, setArtworkTitle] = useState("");
+  const [artworkArtist, setArtworkArtist] = useState("");
 
   useEffect(() => {
     if (!hasFetched.current) {
       fetchRandomQuote();
+      fetchArtOfTheDay();
+
       hasFetched.current = true;
     }
   }, []);
@@ -24,6 +28,21 @@ const HomePage = () => {
       console.error("Error fetching quote:", error);
       setQuote("Failed to load quote.");
       setAuthor("");
+    }
+  };
+
+  const fetchArtOfTheDay = async () => {
+    try {
+      const response = await axios.get(
+        "http://127.0.0.1:8000/api/art-of-the-day"
+      );
+      console.log("ART:", response.data);
+      setArtworkTitle(response.data.title);
+      setArtworkArtist(response.data.artist);
+    } catch (error) {
+      console.error("Greška pri dohvatanju umetničkog dela:", error);
+      setArtworkTitle("Unknown artwork");
+      setArtworkArtist("Unknown artist");
     }
   };
 
@@ -51,6 +70,31 @@ const HomePage = () => {
           <p>
             <strong>- {author}</strong>
           </p>
+        </div>
+      </div>
+      <div
+        style={{
+          position: "fixed",
+          bottom: "20px",
+          left: "50%",
+          transform: "translateX(-50%)",
+          color: "white",
+          fontSize: "14px",
+          backgroundColor: "rgba(0,0,0,0.6)",
+          padding: "10px 16px",
+          borderRadius: "8px",
+          textAlign: "center",
+          zIndex: 999,
+          fontFamily: "sans-serif",
+        }}
+      >
+        <div style={{ fontWeight: "bold", marginBottom: "4px" }}>
+          Art of the day:
+        </div>
+        <div>
+          <strong>{artworkTitle}</strong>
+          {" – "}
+          <em>{artworkArtist}</em>
         </div>
       </div>
     </div>
